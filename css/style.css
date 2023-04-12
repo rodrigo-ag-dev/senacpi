@@ -1,0 +1,523 @@
+:root {
+  --menu-size: 250px
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  outline: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+body {
+  background-color: #eee;
+}
+
+table {
+  table-layout: auto;
+  width: 100%;
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  min-width: 200px;
+}
+
+th {
+  border: 1px solid #dddddd;
+  background-color: #cccccc;
+  text-align: left;
+  padding: 8px;
+}
+
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+.headerGrid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.headerGrid img {
+  width: 33px;
+  height: 33px;
+  padding: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+.headerGrid img:hover {
+  border-radius: 50%;
+  background-color: rgb(49, 54, 85);
+}
+
+.columnValue {
+  text-align: right;
+  max-width: 80px;
+}
+
+.columnDescription {
+  min-width: 200px;
+}
+
+
+header {
+  display: flex;
+  flex-direction: row;
+  background-color: #222;
+  padding: 10px;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+}
+
+header p {
+  color: #fff;
+}
+
+.button {
+  right: 15px;
+  color: #fff;
+  background-color: gray;
+  padding-block: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  width: 120px;
+  flex-wrap: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .3s;
+}
+
+#welcome {
+  position: absolute;
+}
+
+.button:hover {
+  background-color: rgb(49, 54, 85);
+  cursor: pointer;
+}
+
+header rect {
+  fill: #fff;
+}
+
+.menuShowing {
+  margin-left: var(--menu-size);
+}
+
+.menuHighing {
+  margin-left: 0;
+}
+
+#btnMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #222;
+  transition: all .5s;
+  width: 40px;
+  height: 40px;
+}
+
+#btnMenu:hover {
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: rgb(49, 54, 85);
+}
+
+#btnMenu:active {
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: black;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  min-width: 70%;
+  max-width: 80%;
+  margin: 0 auto;
+  margin-top: 50px;
+  overflow: hidden;
+  min-width: 350px;
+}
+
+.menu {
+  transition: background .3s;
+  position: fixed;
+  top: 0;
+  width: var(--menu-size);
+  height: 100%;
+  background-color: #222;
+}
+
+.menu ul {
+  list-style: none;
+}
+
+.menu ul li {
+  display: block;
+}
+
+.menu ul li a {
+  display: block;
+  color: #fff;
+  font-size: 19px;
+  text-decoration: none;
+  padding: 10px 15px;
+}
+
+.menu ul li a:hover {
+  background-color: rgb(49, 54, 85);
+}
+
+.effect {
+  transition: margin .4s;
+}
+
+.show {
+  margin-left: 0;
+}
+
+.hide {
+  margin-left: calc(var(--menu-size) * -1);
+}
+
+.headerclose {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 60px;
+}
+
+.btnClose {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  background-color: transparent;
+  transition: all .5s;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+}
+
+.btnClose:hover {
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: red;
+}
+
+.colorGray {
+  background-color: gray;
+}
+
+.btnClose:active {
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: black;
+}
+
+.content ul {
+  margin-top: 10px;
+  padding-bottom: 15px;
+  background-color: white;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #e0dfdc;
+  padding-inline: 30px;
+}
+
+.content ul li {
+  display: flex;
+  flex-direction: column;
+}
+
+.content ul li p {
+  margin: 0px;
+  padding-top: 5px;
+  margin-left: 5px;
+}
+
+.content ul li h4,
+h5 {
+  margin: 0px;
+  padding: 0px;
+  margin-left: 12px;
+}
+
+.content ul h1 {
+  text-transform: uppercase;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.6rem;
+  line-height: 1.5rem;
+}
+
+.content ul h2 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.6rem;
+  line-height: 1.5rem;
+}
+
+.content ul h3 {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  line-height: 1.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #303030;
+}
+
+.content .borderImage {
+  position: absolute;
+  top: 60px;
+  left: 40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 90px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 1px #fff, 0 0 5px #555;
+}
+
+.content .perfilImage {
+  position: relative;
+  width: 176px;
+  height: 176px;
+  border-radius: 88px;
+}
+
+.content .perfilTitulo {
+  position: absolute;
+  top: 70px;
+  left: 250px;
+  height: 100%;
+  width: 100%;
+  max-width: 850px;
+  max-height: 256px;
+  font-weight: bold;
+  font-size: 5rem;
+  line-height: 1.5rem;
+  text-shadow: 0 0 1px #fff, 0 0 5px #fff;
+}
+
+@media (width < 1300px) {
+  .content .perfilTitulo {
+    font-size: 4rem;
+  }
+}
+
+@media (width < 1100px) {
+  .content .perfilTitulo {
+    font-size: 3rem;
+  }
+}
+
+@media (width < 900px) {
+  .content .perfilTitulo {
+    font-size: 2rem;
+  }
+}
+
+@media (width < 700px) {
+  .content .perfilTitulo {
+    top: 30px;
+    left: 45px;
+    font-size: 1rem;
+  }
+}
+
+@media (width < 500px) {
+  .content .perfilTitulo {
+    font-size: 1rem;
+  }
+}
+
+.content .capaTopo {
+  margin-top: 15px;
+  background-color: #a0b4b7;
+  min-height: 180px;
+  max-height: 180px;
+  height: 100px;
+  border-radius: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: 0.5px solid #e0dfdc;
+  overflow: hidden;
+}
+
+.content .capaBase {
+  background-color: white;
+  min-height: 180px;
+  border-radius: 0px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 0.5px solid lightgray;
+  padding-top: 80px;
+  margin-top: -25px;
+}
+
+.content .footer {
+  position: relative;
+  bottom: 0;
+  height: 15px;
+}
+
+
+#series {
+  display: flex;
+  flex-direction: row;
+}
+
+.secao-listas {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.groupCard {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cards {
+  position: relative;
+  color: #000;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #000;
+  overflow: hidden;
+  margin-top: 30px;
+  width: 270px;
+  height: 400px;
+  margin: 5px;
+  box-shadow: 0 0 1px #000, 0 0 5px #111;
+}
+
+.cards img {
+  max-height: 100%;
+}
+
+.cards p {
+  position: absolute;
+  bottom: 4px;
+  color: #fff;
+  font-size: 23px;
+  white-space: wrap;
+  overflow: hidden;
+  text-shadow: 2px 2px #000;
+  background-color: #297fcfaa;
+  box-shadow: 0 0 1px #000, 0 0 5px #111;
+  padding: 5px;
+  padding-inline: 25px;
+  border-end-start-radius: 8px;
+  border-start-end-radius: 50%;
+}
+
+.nota {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 2px 2px #000;
+  background-color: #297fcfaa;
+  border-start-end-radius: 8px;
+  border-end-start-radius: 50%;
+  box-shadow: 0 0 1px #000, 0 0 5px #111;
+  width: 50px;
+  height: 50px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#loginBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 0px;
+  height: 0px;
+  background-color: #00000055;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login {
+  position: relative;
+  display: column;
+  width: 50%;
+  height: 70%;
+  max-width: 400px;
+  max-height: 350px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 1px #000, 0 0 10px #111;
+
+}
+
+#loginDetail {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.inputText {
+  display: flex;
+  text-justify: center;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  border: 1px solid #999;
+  justify-content: center;
+  padding: 5px;
+}
+
+input {
+  width: 100%;
+  font-size: 20px;
+}
+
+#loginTop {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 60px;
+}
+
+#loginBase {
+  display: flex;
+  height: 25px;
+  align-items: center;
+  justify-content: center;
+}
