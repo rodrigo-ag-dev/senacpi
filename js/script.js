@@ -91,16 +91,24 @@ const optionHomeEvent = (e) => {
     <ul>
         <h2>Formulário de inscrição</h2>
         <li>
-            <div>
-            <h3>Nome completo</h3>
-            <p>Rodrigo Alexandre Gonçalves</p>
-
-            <h3>CPF</h3>
-            <p>000.000.000-00</p>
-
-            <h3>e-mail</h3>
-            <p>rodrigo@dominio.com.br</p>
-        </div>
+            <form>
+                <label for="fname">Nome completo</label>
+                <div class="inputText">
+                    <input type="text" id="name" autofocus><br><br>
+                </div>
+                <label for="lname">CPF</label>
+                <div class="inputText">
+                    <input type="text" id="document"><br><br>
+                </div>
+                <label for="lname">e-mail</label>
+                <div class="inputText">
+                    <input type="text" id="email"><br><br>
+                </div>
+            </form>        
+            <div id="loginBase">
+              <p id="confirmOk" class="button">Ok</p>
+              <p id="clear" class="button">Limpar</p>
+            </div>
         </li>
     </ul>
     `
@@ -193,7 +201,7 @@ welcome.addEventListener("click", e => {
             <form id="loginDetail" action="/action_page.php">
                 <label for="fname">e-mail</label>
                 <div class="inputText">
-                  <input type="text" id="loginEmail"><br><br>
+                  <input type="text" id="loginEmail" autofocus><br><br>
                 </div>
                 <label for="lname">Senha</label>
                 <div class="inputText">
@@ -234,7 +242,8 @@ const doLoad = async () => {
         htmlMenuOptions += `<li><a id="optionLists" href="#">Comunicação com API</a></li> `
         const subjectFetch = await fetch(_address + 'subject', { headers: { "Authorization": "Bearer " + _token } })
         const subjectJson = await subjectFetch.json()
-        if (subjectJson) {
+        console.log('subjectJson', typeof subjectJson, subjectJson.length)
+        if (subjectJson && subjectJson.length) {
             subjectJson.forEach((e, i) => {
                 htmlMenuOptions += `<li><a id="optionSubject_${e.id}" onclick="optionSubject('${e.id}')" href="#">${e.name}</a></li> `
             })

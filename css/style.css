@@ -500,12 +500,24 @@ h5 {
   border-radius: 3px;
   border: 1px solid #999;
   justify-content: center;
-  padding: 5px;
 }
 
 input {
   width: 100%;
   font-size: 20px;
+  padding: 2px;
+}
+
+input:focus {
+  border: 2px solid rgb(67, 250, 67);
+}
+
+input:not(:focus) {
+  border: 0px solid #999;
+}
+
+input:hover {
+  border: 2px solid rgb(33, 152, 250);
 }
 
 #loginTop {
