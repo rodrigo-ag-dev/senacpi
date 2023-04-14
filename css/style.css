@@ -516,15 +516,15 @@ input {
 }
 
 input:focus {
-  border: 2px solid rgb(67, 250, 67);
+  background-color: rgb(238, 255, 238);
 }
 
 input:not(:focus) {
-  border: 0px solid #999;
+  background-color: transparent;
 }
 
 input:hover {
-  border: 2px solid rgb(33, 152, 250);
+  border: 1px solid blue;
 }
 
 #loginTop {
