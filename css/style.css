@@ -152,7 +152,6 @@ header rect {
   min-width: 70%;
   max-width: 80%;
   margin: 0 auto;
-  margin-top: 50px;
   overflow: hidden;
   min-width: 350px;
 }
@@ -292,7 +291,7 @@ h5 {
 
 .content .borderImage {
   position: absolute;
-  top: 60px;
+  top: 80px;
   left: 40px;
   width: 180px;
   height: 180px;
@@ -313,9 +312,8 @@ h5 {
 
 .content .perfilTitulo {
   position: absolute;
-  top: 70px;
+  top: 80px;
   left: 250px;
-  height: 100%;
   width: 100%;
   max-width: 850px;
   max-height: 256px;
@@ -345,15 +343,24 @@ h5 {
 
 @media (width < 700px) {
   .content .perfilTitulo {
-    top: 30px;
-    left: 45px;
-    font-size: 1rem;
+    top: 40px;
+    left: 0px;
+    font-size: 2.1rem;
+    text-align: center;
+  }
+
+  .content .borderImage {
+    left: calc(calc(100% / 2) - 90px);
+  }
+
+  .content .capaBase {
+    text-align: center;
   }
 }
 
 @media (width < 500px) {
   .content .perfilTitulo {
-    font-size: 1rem;
+    font-size: 1.7rem;
   }
 }
 
