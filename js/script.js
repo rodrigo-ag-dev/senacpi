@@ -51,9 +51,7 @@ const getDataRoute = (route) => {
 
 const menu = document.querySelector('#menu')
 const mcl = menu.classList
-
 const btnClose = document.querySelector('.btnClose')
-
 const detail = document.querySelector('#detail')
 
 const hideMenu = () => {
@@ -80,36 +78,36 @@ const optionHomeEvent = (e) => {
     e.preventDefault()
     detail.innerHTML = `
     <ul>
-        <h2>Apresentação</h2>
-        <li>
-            <div>
-                <p>Deseja ser aluno da melhor universidade do país?</p>
-                <p>É só preencher o formulário abaixo e aguarde um retorno da nossa equipe.</p>
-            </div>
-        </li>
+      <h2>Apresentação</h2>
+      <li>
+        <div>
+          <p>Deseja ser aluno da melhor universidade do país?</p>
+          <p>Então faça o preenchimento do formulário com os dados solicitados e aguarde um retorno da nossa equipe.</p>
+        </div>
+      </li>
     </ul>
     <ul>
-        <h2>Formulário de inscrição</h2>
-        <li>
-            <form>
-                <label for="fname">Nome completo</label>
-                <div class="inputText">
-                    <input type="text" id="name" autofocus><br><br>
-                </div>
-                <label for="lname">CPF</label>
-                <div class="inputText">
-                    <input type="text" id="document"><br><br>
-                </div>
-                <label for="lname">e-mail</label>
-                <div class="inputText">
-                    <input type="text" id="email"><br><br>
-                </div>
-            </form>        
-            <div id="loginBase">
-              <p id="confirmOk" class="button">Ok</p>
-              <p id="clear" class="button">Limpar</p>
-            </div>
-        </li>
+      <h2>Formulário de inscrição</h2>
+      <li>
+        <form>
+          <label for="fname">Nome completo</label>
+          <div class="inputText">
+            <input type="text" id="name" autofocus><br><br>
+          </div>
+          <label for="lname">CPF</label>
+          <div class="inputText">
+            <input type="text" id="document"><br><br>
+          </div>
+          <label for="lname">e-mail</label>
+          <div class="inputText">
+            <input type="text" id="email"><br><br>
+          </div>
+        </form>        
+        <div id="loginBase">
+          <p id="confirmOk" class="button">Ok</p>
+          <p id="clear" class="button">Limpar</p>
+        </div>
+      </li>
     </ul>
     `
     localStorage.setItem("page", "optionHome")
@@ -120,60 +118,72 @@ const optionListsEvent = (e) => {
     e.preventDefault()
     detail.innerHTML = ` 
     <ul>
-        <h2>Comunicação com API</h2>
-        <li>
-            <div>
-                <section id="listas" class="secao-listas">
-                </section>
-            </div>
-        </li>
+      <h2>Comunicação com API</h2>
+      <li>
+        <div>
+          <section id="listas" class="secao-listas">
+          </section>
+        </div>
+      </li>
     </ul>`
     localStorage.setItem("page", "optionLists")
     getDataRoute("student")
     hideMenu()
 }
 
+const showGrid = (idSubject) => {
+    fetch(`${_address}assessment/subject/${idSubject}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+        .then(
+            data => data.json()
+                .then(json => {
+                    var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
+                    var media = 0
+                    for (e of json) {
+                        media += (e.value * e.weight)
+                        grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValue">${e.value.toFixed(2)}</td> </tr>`
+                    }
+                    grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
+                    document.querySelector("#tableTag").innerHTML = grid
+                })
+        )
+}
+
 const optionSubject = async (id) => {
-    console.log('id', id)
     localStorage.setItem("page", `optionSubject_${id}`)
-
-    const subjectData = await fetch(`${_address}subject/${id}`, { headers: { "Authorization": "Bearer " + _token } })
-    const subjectJSon = await subjectData.json()
-
-    const teacherData = await fetch(`${_address}teacher/${subjectJSon[0].idteacher}`, { headers: { "Authorization": "Bearer " + _token } })
-    const teacherJSon = await teacherData.json()
-
-    const assessmentData = await fetch(`${_address}assessment/subject/${id}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-    const assessmentJSon = await assessmentData.json()
-
-    const showGrid = async () => {
-        var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
-        var media = 0
-        for (e of assessmentJSon) {
-            media += (e.value * e.weight)
-            grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValue">${e.value.toFixed(2)}</td> </tr>`
-        }
-        grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
-        return grid
-    }
 
     detail.innerHTML = ` 
     <ul>
-        <h2>${subjectJSon[0].name}</h2>
-        <div class="headerGrid">
-          <h3>${teacherJSon[0].name}</h3>
-          <img onclick="optionSubject('${id}')" width=25px height=25px src="./assets/images/refresh-mini.png" alt="">
+      <h2 id="subjectTag"></h2>
+      <div class="headerGrid">
+        <h3 id="teacherTag"></h3>
+        <img onclick="showGrid('${id}')" width=25px height=25px src="./assets/images/refresh-mini.png" alt="">
+      </div>
+      <li>
+        <div>
+          <section id="listas" class="secao-listas">
+            <table id="tableTag"></table>                
+          </section>
         </div>
-        <li>
-            <div>
-                <section id="listas" class="secao-listas">
-                    <table>
-                        ${await showGrid()}
-                    </table>                
-                </section>
-            </div>
-        </li>
+      </li>
     </ul>`
+
+    fetch(`${_address}subject/${id}`, { headers: { "Authorization": "Bearer " + _token } })
+        .then(data => data.json()
+            .then(json => {
+                document.querySelector("#subjectTag").innerHTML = json[0].name
+                _teacher = json[0].idteacher
+
+                fetch(`${_address}teacher/${_teacher}`, { headers: { "Authorization": "Bearer " + _token } })
+                    .then(data => data.json()
+                        .then(json => {
+                            document.querySelector("#teacherTag").innerHTML = json[0].name
+                        })
+                    )
+
+                showGrid(id)
+            })
+        )
+
     hideMenu()
 }
 
@@ -193,24 +203,24 @@ welcome.addEventListener("click", e => {
         loginBack.style.height = '100%'
         loginBack.innerHTML = `
         <div id="login">
-            <div class="headerclose">
-                <div id="closeLoginButton" class="btnClose menu effect colorGray">
-                    <img width=100% height=100% src="./assets/images/close.png" alt="">
-                </div>
+          <div class="headerclose">
+            <div id="closeLoginButton" class="btnClose menu effect colorGray">
+              <img width=100% height=100% src="./assets/images/close.png" alt="">
             </div>
-            <form id="loginDetail" action="/action_page.php">
-                <label for="fname">e-mail</label>
-                <div class="inputText">
-                  <input type="text" id="loginEmail" autofocus><br><br>
-                </div>
-                <label for="lname">Senha</label>
-                <div class="inputText">
-                  <input type="password" id="loginPassword"><br><br>
-                </div>
-            </form>        
-            <div id="loginBase">
-              <p id="loginOk" class="button">Ok</p>
+          </div>
+          <form id="loginDetail" action="/action_page.php">
+            <label for="fname">e-mail</label>
+            <div class="inputText">
+              <input type="text" id="loginEmail" autofocus><br><br>
             </div>
+            <label for="lname">Senha</label>
+            <div class="inputText">
+              <input type="password" id="loginPassword"><br><br>
+            </div>
+          </form>        
+          <div id="loginBase">
+            <p id="loginOk" class="button">Ok</p>
+          </div>
         </div>
         `
         closeLoginButton.addEventListener("click", e => loginBack.click())
@@ -242,7 +252,6 @@ const doLoad = async () => {
         htmlMenuOptions += `<li><a id="optionLists" href="#">Comunicação com API</a></li> `
         const subjectFetch = await fetch(_address + 'subject', { headers: { "Authorization": "Bearer " + _token } })
         const subjectJson = await subjectFetch.json()
-        console.log('subjectJson', typeof subjectJson, subjectJson.length)
         if (subjectJson && subjectJson.length) {
             subjectJson.forEach((e, i) => {
                 htmlMenuOptions += `<li><a id="optionSubject_${e.id}" onclick="optionSubject('${e.id}')" href="#">${e.name}</a></li> `
