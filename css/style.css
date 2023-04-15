@@ -41,17 +41,25 @@ tr:nth-child(even) {
 }
 
 .headerGrid {
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.headerGridRow {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .headerGrid img {
   width: 33px;
   height: 33px;
   padding: 5px;
-  margin-bottom: 5px;
+  margin-inline: 5px;
   cursor: pointer;
   transition: all .5s;
 }
@@ -63,6 +71,11 @@ tr:nth-child(even) {
 
 .columnValue {
   text-align: right;
+  max-width: 80px;
+}
+
+.columnValueLeft {
+  text-align: left;
   max-width: 80px;
 }
 
@@ -176,7 +189,7 @@ header rect {
 .menu ul li a {
   display: block;
   color: #fff;
-  font-size: 19px;
+  font-size: 15px;
   text-decoration: none;
   padding: 10px 15px;
 }
@@ -265,27 +278,22 @@ h5 {
 
 .content ul h1 {
   text-transform: uppercase;
-  margin-top: 15px;
-  margin-bottom: 5px;
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   line-height: 1.5rem;
 }
 
 .content ul h2 {
-  margin-top: 15px;
-  margin-bottom: 5px;
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   line-height: 1.5rem;
 }
 
 .content ul h3 {
   margin-top: 5px;
-  margin-bottom: 2px;
   line-height: 1.5rem;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #303030;
 }
 
@@ -323,47 +331,6 @@ h5 {
   text-shadow: 0 0 1px #fff, 0 0 5px #fff;
 }
 
-@media (width < 1300px) {
-  .content .perfilTitulo {
-    font-size: 4rem;
-  }
-}
-
-@media (width < 1100px) {
-  .content .perfilTitulo {
-    font-size: 3rem;
-  }
-}
-
-@media (width < 900px) {
-  .content .perfilTitulo {
-    font-size: 2rem;
-  }
-}
-
-@media (width < 700px) {
-  .content .perfilTitulo {
-    top: 40px;
-    left: 0px;
-    font-size: 2.1rem;
-    text-align: center;
-  }
-
-  .content .borderImage {
-    left: calc(calc(100% / 2) - 90px);
-  }
-
-  .content .capaBase {
-    text-align: center;
-  }
-}
-
-@media (width < 500px) {
-  .content .perfilTitulo {
-    font-size: 1.7rem;
-  }
-}
-
 .content .capaTopo {
   margin-top: 15px;
   background-color: #a0b4b7;
@@ -379,13 +346,25 @@ h5 {
 
 .content .capaBase {
   background-color: white;
-  min-height: 180px;
+  min-height: 80px;
   border-radius: 0px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   border: 0.5px solid lightgray;
   padding-top: 80px;
   margin-top: -25px;
+}
+
+.content .capaBase h2 {
+  position: absolute;
+  top: 180px;
+  left: 250px;
+}
+
+.content .capaBase h3 {
+  position: absolute;
+  top: 200px;
+  left: 250px;
 }
 
 .content .footer {
@@ -536,7 +515,119 @@ input:hover {
 
 #loginBase {
   display: flex;
-  height: 25px;
+  flex-direction: column;
+  height: 40px;
+  align-items: center;
+}
+
+#formBase {
+  display: flex;
+  height: 40px;
   align-items: center;
   justify-content: center;
+}
+
+#errorMessage {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: red;
+}
+
+#pdfViewer {
+  width: 100%;
+  height: 100%;
+  min-height: 80vh;
+}
+
+#subjectTag {
+  margin: 0;
+}
+
+.highlights {
+  background-color: #444;
+}
+
+.divider {
+  position: relative;
+  display: flex;
+  height: 1px;
+  background-color: #888888;
+  left: 5%;
+  width: 90%;
+  align-items: center;
+  justify-content: center;
+}
+
+label {
+  font-weight: bold;
+}
+
+@media (width < 1300px) {
+  .content .perfilTitulo {
+    font-size: 4rem;
+  }
+}
+
+@media (width < 1100px) {
+  .content .perfilTitulo {
+    font-size: 3rem;
+  }
+
+  .content .capaBase :is(h2, h3) {
+    font-size: 0.9rem;
+  }
+}
+
+@media (width < 900px) {
+  .content .perfilTitulo {
+    font-size: 2rem;
+  }
+
+  .content .capaBase :is(h2, h3) {
+    font-size: 0.8rem;
+  }
+}
+
+@media (width < 780) {
+  .content .capaBase :is(h2, h3) {
+    font-size: 0.5rem;
+  }
+}
+
+@media (width < 700px) {
+  .content .perfilTitulo {
+    top: 40px;
+    left: 0px;
+    font-size: 2.1rem;
+    text-align: center;
+  }
+
+  .content .capaBase {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content .capaBase h2 {
+    margin-top: 15px;
+  }
+
+  .content .capaBase :is(h2, h3) {
+    position: unset;
+  }
+
+  .content .borderImage {
+    left: calc(calc(100% / 2) - 90px);
+  }
+
+  .content .capaBase {
+    text-align: center;
+  }
+}
+
+@media (width < 500px) {
+  .content .perfilTitulo {
+    font-size: 1.7rem;
+  }
 }
