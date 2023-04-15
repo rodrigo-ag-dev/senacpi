@@ -266,7 +266,7 @@ header rect {
 .content ul li p {
   margin: 0px;
   padding-top: 5px;
-  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .content ul li h4,
@@ -521,6 +521,7 @@ input:hover {
 }
 
 #formBase {
+  margin-top: 20px;
   display: flex;
   height: 40px;
   align-items: center;
@@ -561,6 +562,14 @@ input:hover {
 
 label {
   font-weight: bold;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.margin0 {
+  margin-bottom: 0px;
 }
 
 @media (width < 1300px) {
@@ -630,4 +639,10 @@ label {
   .content .perfilTitulo {
     font-size: 1.7rem;
   }
+}
+
+#anexarButton {
+  height: 100%;
+  width: 50px;
+  margin-left: 5px;
 }
