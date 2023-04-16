@@ -245,19 +245,20 @@ const viewPDF = (id) => {
     const obj = document.querySelector('#pdfViewer')
     pdfDiv.removeChild(obj)
   } else {
-    console.log(`${_address}material/disciplina/${id}`)
+    iconMaterial.src = "./assets/images/contrair.png"
+
+    var obj = document.createElement('object')
+    obj.id = 'pdfViewer'
+    obj.type = 'application/pdf'
+    obj.style = 'background-Color: #333333'
+    pdfDiv.appendChild(obj)
+    pdfDiv.focus()
+
     fetch(`${_address}material/disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
-          .then(json => {
-            iconMaterial.src = "./assets/images/contrair.png"
-            const obj = document.createElement('object')
-            obj.id = 'pdfViewer'
-            obj.type = 'application/pdf'
-            obj.data = 'data:application/pdf;base64,'.concat(json[0].content)
-            pdfDiv.appendChild(obj)
-            pdfDiv.focus()
-          })
+          .then(json =>
+            obj.data = 'data:application/pdf;base64,'.concat(json[0].content))
       )
   }
 }
