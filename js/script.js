@@ -105,7 +105,7 @@ const optionHomeEvent = (e) => {
             <input type="text" id="emailForm"><br><br>
           </div>
           <label for="ldoc1">Envie cópias digitáis dos seguintes documentos</label>
-          <p>CPF, RG, Histórico escolares</p>
+          <p>Foto 3x4, CPF, RG, Histórico escolares</p>
           <div class="headerGrid">
             <div class="inputText flex1 margin0">
               <input type="text" id="docForm" readonly><br><br>
@@ -125,11 +125,28 @@ const optionHomeEvent = (e) => {
   hideMenu()
 }
 
+const rematriculaMenuEvent = (e) => {
+  e.preventDefault()
+  detail.innerHTML = ` 
+    <ul>
+      <h5> </h5>
+      <h2>Rematricula</h2>
+      <li>
+        <div>
+          <p>O semestre ainda não foi concluído, aguarde o fechamento de todas as notas.</p>
+          <p>As disciplinas na qual você não obteve a média 6 ou superior e as novas disciplinas do próximo semestre, estarão disponíveis para inscrição.</p>
+        </div>
+      </li>
+    </ul>`
+  localStorage.setItem("page", "rematriculaMenu")
+  hideMenu()
+}
+
 const optionListsEvent = (e) => {
   e.preventDefault()
   detail.innerHTML = ` 
     <ul>
-      <h2>Equipe de desenvolvimento</h2>
+      <br/><h2>Equipe de desenvolvimento</h2><br/>
       <li>
         <div>
           <section id="listas" class="secao-listas">
@@ -140,6 +157,30 @@ const optionListsEvent = (e) => {
   localStorage.setItem("page", "optionLists")
   getDataRoute("student")
   hideMenu()
+}
+
+const viewDoAssessment = (idSubject) => {
+  if (iconDoAssessment.tag == 1) {
+    iconDoAssessment.tag = 0
+    iconDoAssessment.src = "./assets/images/expandir.png"
+    document.querySelector("#tableTagDoAssessment").innerHTML = null
+  } else {
+    iconDoAssessment.tag = 1
+    iconDoAssessment.src = "./assets/images/contrair.png"
+    fetch(`${_address}assessment/subject/${idSubject}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
+            for (e of json) {
+              situacao = e.value ? "Entregue" : "Aguardando"
+              grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
+            }
+            document.querySelector("#tableTagDoAssessment").innerHTML = grid
+            tableTagDoAssessment.focus()
+          })
+      )
+  }
 }
 
 const viewRequestService = (idSubject, refresh) => {
@@ -229,7 +270,7 @@ const optionSubject = async (id) => {
           <h2 id="subjectTag">Disciplina</h2>
           <h3 id="teacherTag">Professor</h3>
         </div>
-        <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="">
+        <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de estudo">
       </div>
       <li><div id="pdfDiv"></div></li>
     </ul>
@@ -237,12 +278,13 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Fazer avaliações</h2>
         <div class="headerGrid">
-          <img id="doAssessment" onclick="doAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="">
+          <img id="iconDoAssessment" onclick="viewDoAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de avaliação">
         </div>
       </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
+            <table id="tableTagDoAssessment"></table>
           </section>
         </div>
       </li>
@@ -251,14 +293,14 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Acompanhar avaliações</h2>
         <div class="headerGrid">
-          <img id="refreshAssessment" onclick="viewAssessment('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="">
-          <img id="iconAssessment" onclick="viewAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="">
+          <img id="refreshAssessment" onclick="viewAssessment('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar notas das avaliações">
+          <img id="iconAssessment" onclick="viewAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair notas das avaliações">
         </div>
       </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
-            <table id="tableTag"></table>                
+            <table id="tableTag"></table>
           </section>
         </div>
       </li>
@@ -267,14 +309,14 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Solicitar atendimento</h2>
         <div class="headerGrid">
-          <img id="refreshRequestService" onclick="viewRequestService('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="">
-          <img id="iconRequestService" onclick="viewRequestService('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="">
+          <img id="refreshRequestService" onclick="viewRequestService('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar solicitação de atendimento">
+          <img id="iconRequestService" onclick="viewRequestService('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair solicitação de atendimento">
         </div>
       </div>
       <li>
         <div>
           <section id="listasRequestService" class="secao-listas">
-            <table id="tableTagRequestService"></table>                
+            <table id="tableTagRequestService"></table>
           </section>
         </div>
       </li>
@@ -322,7 +364,7 @@ welcome.addEventListener("click", e => {
         <div id="login">
           <div class="headerclose">
             <div id="closeLoginButton" class="btnClose menu effect colorGray">
-              <img width=100% height=100% src="./assets/images/close.png" alt="">
+              <img width=100% height=100% src="./assets/images/close.png" alt="Fechar menu">
             </div>
           </div>
           <form id="loginDetail" action="/action_page.php">
@@ -389,8 +431,13 @@ const doLoad = async () => {
   if (optionHome)
     optionHome.addEventListener("click", e => optionHomeEvent(e))
 
-  if (token && optionLists)
-    optionLists.addEventListener("click", e => optionListsEvent(e))
+  if (token) {
+    if (optionLists)
+      optionLists.addEventListener("click", e => optionListsEvent(e))
+
+    if (rematriculaMenu)
+      rematriculaMenu.addEventListener("click", e => rematriculaMenuEvent(e))
+  }
 
   _image = localStorage.getItem("image")
   _userId = localStorage.getItem("userId")
