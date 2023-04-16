@@ -1,4 +1,5 @@
 const _address = 'https://senacserverpi.herokuapp.com/api/'
+//const _address = 'http://127.0.0.1:3333/api/'
 var _token = null
 var _userName = null
 var _userId = null
@@ -6,22 +7,22 @@ var _userId = null
 const getImageRoute = async (element, route) => {
   const response = await fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
   const data = await response.json()
-  if (data && data.image)
-    element.src = data.image
+  if (data && data.imagem)
+    element.src = data.imagem
 }
 
 const card = (element) => {
   const poster = document.createElement("img")
-  getImageRoute(poster, "student/image/" + element.image)
+  getImageRoute(poster, "aluno/imagem/" + element.imagem)
 
   const titulo = document.createElement("p")
-  titulo.innerHTML = element.name
+  titulo.innerHTML = element.nome
 
   const divNota = document.createElement("div")
   divNota.classList.add("nota")
 
   const nota = document.createElement("span")
-  nota.innerHTML = element.id
+  nota.innerHTML = element.codigo
 
   divNota.appendChild(nota)
 
@@ -40,7 +41,7 @@ const getDataRoute = (route) => {
     .then(resp => resp.json()
       .then(dados => {
         if (dados) {
-          dados.sort((a, b) => a.name > b.name ? 1 : -1)
+          dados.sort((a, b) => a.nome > b.nome ? 1 : -1)
             .forEach(element =>
               document.querySelector("#listas").appendChild(card(element))
             )
@@ -155,11 +156,11 @@ const optionListsEvent = (e) => {
       </li>
     </ul>`
   localStorage.setItem("page", "optionLists")
-  getDataRoute("student")
+  getDataRoute("aluno")
   hideMenu()
 }
 
-const viewDoAssessment = (idSubject) => {
+const viewDoAssessment = (id) => {
   if (iconDoAssessment.tag == 1) {
     iconDoAssessment.tag = 0
     iconDoAssessment.src = "./assets/images/expandir.png"
@@ -167,14 +168,14 @@ const viewDoAssessment = (idSubject) => {
   } else {
     iconDoAssessment.tag = 1
     iconDoAssessment.src = "./assets/images/contrair.png"
-    fetch(`${_address}assessment/subject/${idSubject}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
           .then(json => {
             var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
             for (e of json) {
-              situacao = e.value ? "Entregue" : "Aguardando"
-              grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
+              situacao = e.nota ? "Avaliado" : e.entregue ? "Entregue" : "Aguardando"
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
             }
             document.querySelector("#tableTagDoAssessment").innerHTML = grid
             tableTagDoAssessment.focus()
@@ -183,8 +184,8 @@ const viewDoAssessment = (idSubject) => {
   }
 }
 
-const viewRequestService = (idSubject, refresh) => {
-  if (iconRequestService.tag == 1 && !refresh) {
+const viewRequestService = (id, atualizar) => {
+  if (iconRequestService.tag == 1 && !atualizar) {
     iconRequestService.tag = 0
     iconRequestService.src = "./assets/images/expandir.png"
     document.querySelector("#tableTagRequestService").innerHTML = null
@@ -193,13 +194,13 @@ const viewRequestService = (idSubject, refresh) => {
     iconRequestService.tag = 1
     iconRequestService.src = "./assets/images/contrair.png"
     refreshRequestService.style.display = null
-    fetch(`${_address}assessment/subject/${idSubject}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
           .then(json => {
             var grid = '<tr> <th class="columnDescription">Solicitar atendimento relacionado a</th> <th class="columnValueLeft">Situação</th> </tr>'
             for (e of json)
-              grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
             grid += `<tr> <td class="columnDescription">Outros assuntos</td> <td class="columnValueLeft">Aguardando retorno</td> </tr>`
             document.querySelector("#tableTagRequestService").innerHTML = grid
             tableTagRequestService.focus()
@@ -208,8 +209,8 @@ const viewRequestService = (idSubject, refresh) => {
   }
 }
 
-const viewAssessment = (idSubject, refresh) => {
-  if (iconAssessment.tag == 1 && !refresh) {
+const viewAssessment = (id, atualizar) => {
+  if (iconAssessment.tag == 1 && !atualizar) {
     iconAssessment.tag = 0
     iconAssessment.src = "./assets/images/expandir.png"
     document.querySelector("#tableTag").innerHTML = null
@@ -218,15 +219,15 @@ const viewAssessment = (idSubject, refresh) => {
     iconAssessment.tag = 1
     iconAssessment.src = "./assets/images/contrair.png"
     refreshAssessment.style.display = null
-    fetch(`${_address}assessment/subject/${idSubject}?idstudent=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
           .then(json => {
             var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
             var media = 0
             for (e of json) {
-              media += (e.value * e.weight)
-              grid += `<tr> <td class="columnDescription">${e.description}</td> <td class="columnValue">${e.value.toFixed(2)}</td> </tr>`
+              media += (e.nota * e.peso)
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
             }
             grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
             document.querySelector("#tableTag").innerHTML = grid
@@ -236,7 +237,7 @@ const viewAssessment = (idSubject, refresh) => {
   }
 }
 
-const viewPDF = (idSubject) => {
+const viewPDF = (id) => {
   const pdfDiv = document.querySelector('#pdfDiv')
   const pdfViewer = document.querySelector('#pdfViewer')
   if (pdfViewer) {
@@ -244,7 +245,8 @@ const viewPDF = (idSubject) => {
     const obj = document.querySelector('#pdfViewer')
     pdfDiv.removeChild(obj)
   } else {
-    fetch(`${_address}courseware/subject/${idSubject}`, { headers: { "Authorization": "Bearer " + _token } })
+    console.log(`${_address}material/disciplina/${id}`)
+    fetch(`${_address}material/disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
           .then(json => {
@@ -322,22 +324,21 @@ const optionSubject = async (id) => {
       </li>
     </ul>
     `
-
   refreshAssessment.style.display = "none"
   refreshRequestService.style.display = "none"
 
   iconAssessment.tag = 0
   iconRequestService.tag = 0
-  fetch(`${_address}subject/${id}`, { headers: { "Authorization": "Bearer " + _token } })
+  fetch(`${_address}disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
     .then(data => data.json()
       .then(json => {
-        document.querySelector("#subjectTag").innerHTML = json[0].name
-        _teacher = json[0].idteacher
+        document.querySelector("#subjectTag").innerHTML = json[0].descricao
+        _teacher = json[0].codigo_professor
 
-        fetch(`${_address}teacher/${_teacher}`, { headers: { "Authorization": "Bearer " + _token } })
+        fetch(`${_address}professor/${_teacher}`, { headers: { "Authorization": "Bearer " + _token } })
           .then(data => data.json()
             .then(json => {
-              document.querySelector("#teacherTag").innerHTML = json[0].name
+              document.querySelector("#teacherTag").innerHTML = json[0].nome
             })
           )
       })
@@ -411,12 +412,12 @@ const doLoad = async () => {
   let htmlMenuOptions = `<li><a id="optionHome" href="#">Apresentação</a></li> `
 
   if (token) {
-    const subjectFetch = await fetch(_address + 'subject', { headers: { "Authorization": "Bearer " + _token } })
+    const subjectFetch = await fetch(_address + 'disciplina', { headers: { "Authorization": "Bearer " + _token } })
     const subjectJson = await subjectFetch.json()
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
     if (subjectJson && subjectJson.length) {
       subjectJson.forEach((e, i) => {
-        htmlMenuOptions += `<li><a id="optionSubject_${e.id}" onclick="optionSubject('${e.id}')" href="#">${e.name}</a></li> `
+        htmlMenuOptions += `<li><a id="optionSubject_${e.codigo}" onclick="optionSubject('${e.codigo}')" href="#">${e.descricao}</a></li> `
       })
     }
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
@@ -445,7 +446,7 @@ const doLoad = async () => {
   _welcome = document.querySelector('#welcome')
   if (_userName) {
     _welcome.innerHTML = 'Olá ' + _userName
-    getImageRoute(perfilImage, "student/image/" + _image)
+    getImageRoute(perfilImage, "aluno/imagem/" + _image)
   } else {
     _welcome.innerHTML = 'Fazer login'
     perfilImage.src = './assets/images/perfil.jpg'
@@ -471,9 +472,9 @@ const doLogin = async (email, password) => {
   } else {
     const data = await response.json()
     localStorage.setItem("token", data.token)
-    localStorage.setItem('userName', data.reg.name)
-    localStorage.setItem('userId', data.reg.id)
-    localStorage.setItem('image', data.reg.image)
+    localStorage.setItem('userName', data.reg.nome)
+    localStorage.setItem('userId', data.reg.codigo)
+    localStorage.setItem('image', data.reg.imagem)
     doLoad()
   }
 }
