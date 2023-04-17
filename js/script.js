@@ -3,6 +3,9 @@ const _address = 'https://senacserverpi.herokuapp.com/api/'
 var _token = null
 var _userName = null
 var _userId = null
+var _curso = null
+var _cursoDescricao = null
+var _semestre = null
 
 const getImageRoute = async (element, route) => {
   const response = await fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
@@ -412,13 +415,28 @@ const doLoad = async () => {
 
   let htmlMenuOptions = `<li><a id="optionHome" href="#">Apresentação</a></li> `
 
+  _image = localStorage.getItem("image")
+  _userId = localStorage.getItem("userId")
+  _userName = localStorage.getItem("userName")
+  _welcome = document.querySelector('#welcome')
+
   if (token) {
-    const subjectFetch = await fetch(_address + 'disciplina', { headers: { "Authorization": "Bearer " + _token } })
-    const subjectJson = await subjectFetch.json()
+    const fetchAluno = await fetch(_address + 'aluno/' + _userId, { headers: { "Authorization": "Bearer " + _token } })
+    const jsonAluno = await fetchAluno.json()
+    _curso = jsonAluno[0].codigo_curso
+    _semestre = jsonAluno[0].semestre
+    
+    const fetchCurso = await fetch(_address + 'curso/' + _curso, { headers: { "Authorization": "Bearer " + _token } })
+    const jsonCurso = await fetchCurso.json()
+    cursoDescricao.innerHTML = jsonCurso[0].descricao
+
+    const fetchDisciplina = await fetch(_address + 'curso/disciplina/' + _curso + '?semestre=' + _semestre, { headers: { "Authorization": "Bearer " + _token } })
+    const jsonDisciplina = await fetchDisciplina.json()
+
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
-    if (subjectJson && subjectJson.length) {
-      subjectJson.forEach((e, i) => {
-        htmlMenuOptions += `<li><a id="optionSubject_${e.codigo}" onclick="optionSubject('${e.codigo}')" href="#">${e.descricao}</a></li> `
+    if (jsonDisciplina && jsonDisciplina.length) {
+      jsonDisciplina.forEach((e, i) => {
+        htmlMenuOptions += `<li><a id="optionSubject_${e.codigo_disciplina}" onclick="optionSubject('${e.codigo_disciplina}')" href="#">${e.descricao}</a></li> `
       })
     }
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
@@ -441,10 +459,6 @@ const doLoad = async () => {
       rematriculaMenu.addEventListener("click", e => rematriculaMenuEvent(e))
   }
 
-  _image = localStorage.getItem("image")
-  _userId = localStorage.getItem("userId")
-  _userName = localStorage.getItem("userName")
-  _welcome = document.querySelector('#welcome')
   if (_userName) {
     _welcome.innerHTML = 'Olá ' + _userName
     getImageRoute(perfilImage, "aluno/imagem/" + _image)
