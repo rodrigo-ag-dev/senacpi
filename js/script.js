@@ -398,6 +398,9 @@ welcome.addEventListener("click", e => {
     })
 
   } else {
+    cursoLocal.innerHTML = null
+    cursoDescricao.innerHTML = null
+
     localStorage.removeItem("token")
     localStorage.removeItem('userName')
     localStorage.removeItem('userId')
@@ -425,9 +428,10 @@ const doLoad = async () => {
     const jsonAluno = await fetchAluno.json()
     _curso = jsonAluno[0].codigo_curso
     _semestre = jsonAluno[0].semestre
-    
+
     const fetchCurso = await fetch(_address + 'curso/' + _curso, { headers: { "Authorization": "Bearer " + _token } })
     const jsonCurso = await fetchCurso.json()
+    cursoLocal.innerHTML = 'São Paulo - SP - Brasil'
     cursoDescricao.innerHTML = jsonCurso[0].descricao
 
     const fetchDisciplina = await fetch(_address + 'curso/disciplina/' + _curso + '?semestre=' + _semestre, { headers: { "Authorization": "Bearer " + _token } })
