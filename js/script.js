@@ -417,11 +417,11 @@ const optionSubject = async (id) => {
       </li>
     </ul>
     `
+  document.querySelector("#iconAvaliacao").tag = 0
+  document.querySelector('#iconAtendimento').tag = 0
   document.querySelector('#atualizaAvaliacao').style.display = "none"
   document.querySelector('#atualizaAtendimento').style.display = "none"
 
-  iconAvaliacao.tag = 0
-  document.querySelector('iconAtendimento').tag = 0
   fetch(`${_address}disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
     .then(data => data.json()
       .then(json => {
@@ -436,8 +436,9 @@ const optionSubject = async (id) => {
           )
       })
     )
-
+  console.log('antes hide')
   hideMenu()
+  console.log('depois hide')
 }
 
 loginBack.addEventListener("click", e => {
