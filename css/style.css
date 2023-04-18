@@ -20,7 +20,7 @@ table {
   width: 100%;
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  min-width: 200px;
+  min-width: 50px;
 }
 
 th {
@@ -645,4 +645,8 @@ label {
   height: 100%;
   width: 50px;
   margin-left: 5px;
+}
+
+.minWidth300px {
+  min-width: 200px;
 }

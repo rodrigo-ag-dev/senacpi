@@ -1,5 +1,5 @@
-const _address = 'https://senacserverpi.herokuapp.com/api/'
-//const _address = 'http://127.0.0.1:3333/api/'
+//const _address = 'https://senacserverpi.herokuapp.com/api/'
+const _address = 'http://127.0.0.1:3333/api/'
 var _token = null
 var _userName = null
 var _userId = null
@@ -141,7 +141,28 @@ const rematriculaMenuEvent = (e) => {
           <p>As disciplinas na qual você não obteve a média 6 ou superior e as novas disciplinas do próximo semestre, estarão disponíveis para inscrição.</p>
         </div>
       </li>
-    </ul>`
+    </ul>
+    <ul>
+      <div class="headerGrid">
+        <h2>Histórico de disciplinas</h2>
+        <img id="iconProximoSemestre" onclick="viewProximoSemestre('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+      </div>
+      <li>
+        <div>
+          <section id="listas" class="secao-listas">
+            <table id="tableProximoSemestreTag"></table>
+          </section>
+        </div>
+      </li>
+      <li>
+        <div>
+          <section id="listas" class="secao-listas">
+            <table id="tableHistoricoTag"></table>
+          </section>
+        </div>
+      </li>
+    </ul>
+  `
   localStorage.setItem("page", "rematriculaMenu")
   hideMenu()
 }
@@ -161,6 +182,56 @@ const optionListsEvent = (e) => {
   localStorage.setItem("page", "optionLists")
   getDataRoute("aluno")
   hideMenu()
+}
+
+const viewProximoSemestre = (id, semestre) => {
+  if (iconProximoSemestre.tag == 1) {
+    iconProximoSemestre.tag = 0
+    iconProximoSemestre.src = "./assets/images/expandir.png"
+    tableProximoSemestreTag.innerHTML = null
+  } else {
+    iconProximoSemestre.tag = 1
+    iconProximoSemestre.src = "./assets/images/contrair.png"
+
+    fetch(`${_address}curso/disciplina/${id}?semestre=${semestre}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var grid = `<tr><th class="columnDescription">${semestre}º - semestre</th></tr>`
+            for (e of json)
+              grid += `<tr><td class="columnDescription">${e.descricao}</td></tr>`
+            tableProximoSemestreTag.innerHTML = grid
+            tableProximoSemestreTag.focus()
+          })
+      )
+
+    fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var semestre = 0
+            var grid = `<tr>
+                          <th class="columnDescription">Semestres anteriores</th>
+                          <th class="columnValue">Nota</th>
+                        </tr>`
+
+            for (e of json) {
+              if (semestre != e.semestre) {
+                semestre = e.semestre
+                grid += `<tr>
+                           <th class="columnDescription">${semestre}º - Semestre</th>
+                           <th class="columnValue"></th>
+                         </tr>`
+              }
+              grid += `<tr> 
+                         <td class="columnDescription">${e.descricao}</td>
+                         <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
+                       </tr>`
+            }
+            tableHistoricoTag.innerHTML = grid
+          })
+      )
+  }
 }
 
 const viewDoAssessment = (id) => {
