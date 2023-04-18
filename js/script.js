@@ -1,4 +1,4 @@
-//const _address = 'https://senacserverpi.herokuapp.com/api/'
+const _address = 'https://senacserverpi.herokuapp.com/api/'
 const _address = 'http://127.0.0.1:3333/api/'
 var _token = null
 var _userName = null
