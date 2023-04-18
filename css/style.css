@@ -173,6 +173,7 @@ header rect {
   font-size: 15px;
   text-decoration: none;
   padding: 10px 15px;
+  transition: all .3s;
 }
 
 .menu ul li a:hover {
@@ -473,7 +474,7 @@ h5 {
 input {
   width: 100%;
   font-size: 20px;
-  padding: 2px;
+  padding-inline: 5px;
 }
 
 input:focus {
@@ -662,20 +663,24 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .7s;
+  transition: background .3s;
 }
 
 button:focus {
-  background-color: rgb(64, 78, 167);
+  background-color: rgb(0, 69, 132);
   cursor: pointer;
 }
 
 button:hover {
-  background-color: rgb(79, 98, 221);
+  background-color: #ec891b;
   cursor: pointer;
 }
 
 #anexarButton {
   width: 50px;
   margin-left: 5px;
+}
+
+.inputError {
+  border: 3px solid rgb(255, 207, 204);
 }

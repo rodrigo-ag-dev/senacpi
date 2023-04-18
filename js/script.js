@@ -96,36 +96,79 @@ const optionHomeEvent = (e) => {
       <h5> </h5>
       <h2>Formulário de inscrição</h2>
       <li>
-        <form>
-          <label for="fname">Nome completo</label>
+        <form id="inscricaoForm">
+          <label for="campoNome">Nome completo</label>
           <div class="inputText">
-            <input type="text" id="nameForm"><br><br>
+            <input type="text" id="campoNome"><br><br>
           </div>
-          <label for="lname">CPF</label>
+          <label for="campoFone">Fone</label>
           <div class="inputText">
-            <input type="text" id="documentForm"><br><br>
+            <input type="text" id="campoFone"><br><br>
           </div>
-          <label for="lname">e-mail</label>
+          <label for="campoEmail">e-mail</label>
           <div class="inputText">
-            <input type="text" id="emailForm"><br><br>
+            <input type="text" id="campoEmail"><br><br>
           </div>
-          <label for="ldoc1">Envie cópias digitáis dos seguintes documentos</label>
+          <label for="campoDocumentos">Envie cópias digitáis dos seguintes documentos</label>
           <p>Foto 3x4, CPF, RG, Histórico escolares</p>
           <div class="headerGrid">
             <div class="inputText flex1 margin0">
-              <input type="text" id="docForm" readonly><br><br>
+              <input type="text" id="campoDocumentos" readonly><br><br>
             </div>
-            <button type="button" id="anexarButton">...</button>
+            <button id="anexarButton" type="button">...</button>
           </div>
         </form>        
         <div id="formBase">
-          <button id="confirmOk" type="button" autofocus>Ok</button>
-          <button id="clear" type="button">Limpar</button>
+          <button id="confirmForm" type="button">Ok</button>
+          <button id="clearForm" type="button">Limpar</button>
         </div>
       </li>
     </ul>
     `
-  nameForm.focus()
+
+  const eForm = document.querySelector('#inscricaoForm')
+  const eClear = document.querySelector('#clearForm')
+  const eConfirm = document.querySelector('#confirmForm')
+  const eAttach = document.querySelector('#anexarButton')
+
+  eAttach.addEventListener("click", e => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = _ => {
+      let files = Array.from(input.files);
+      console.log(files);
+    };
+    input.click();
+  })
+
+  eClear.addEventListener("click", e => {
+    e.preventDefault()
+    for (e of eForm) {
+      e.value = ''
+      e.classList.remove('inputError')
+    }
+    eForm[0].focus()
+  })
+
+  eConfirm.addEventListener("click", e => {
+    e.preventDefault()
+    var camposVazio = ''
+    const labels = document.getElementsByTagName('LABEL');
+    for (l of labels) {
+      if (l.htmlFor != '') {
+        const e = document.getElementById(l.htmlFor);
+        if (e.value == '')
+          e.classList.add('inputError')
+        else
+          e.classList.remove('inputError')
+      }
+    }
+    if (camposVazio)
+      console.log(camposVazio)
+    //eClear.click()
+  })
+
+  eForm[0].focus()
   localStorage.setItem("page", "optionHome")
   hideMenu()
 }
