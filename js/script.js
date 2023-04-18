@@ -235,91 +235,16 @@ const viewCursoHistorico = (id, semestre) => {
   }
 }
 
-const viewDoAssessment = (id) => {
-  if (iconDoAssessment.tag == 1) {
-    iconDoAssessment.tag = 0
-    iconDoAssessment.src = "./assets/images/expandir.png"
-    document.querySelector("#tableTagDoAssessment").innerHTML = null
-  } else {
-    iconDoAssessment.tag = 1
-    iconDoAssessment.src = "./assets/images/contrair.png"
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
-            for (e of json) {
-              situacao = e.nota ? "Avaliado" : e.entregue ? "Entregue" : "Aguardando"
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
-            }
-            document.querySelector("#tableTagDoAssessment").innerHTML = grid
-            tableTagDoAssessment.focus()
-          })
-      )
-  }
-}
-
-const viewRequestService = (id, atualizar) => {
-  if (iconRequestService.tag == 1 && !atualizar) {
-    iconRequestService.tag = 0
-    iconRequestService.src = "./assets/images/expandir.png"
-    document.querySelector("#tableTagRequestService").innerHTML = null
-    refreshRequestService.style.display = "none"
-  } else {
-    iconRequestService.tag = 1
-    iconRequestService.src = "./assets/images/contrair.png"
-    refreshRequestService.style.display = null
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Solicitar atendimento relacionado a</th> <th class="columnValueLeft">Situação</th> </tr>'
-            for (e of json)
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
-            grid += `<tr> <td class="columnDescription">Outros assuntos</td> <td class="columnValueLeft">Aguardando retorno</td> </tr>`
-            document.querySelector("#tableTagRequestService").innerHTML = grid
-            tableTagRequestService.focus()
-          })
-      )
-  }
-}
-
-const viewAssessment = (id, atualizar) => {
-  if (iconAssessment.tag == 1 && !atualizar) {
-    iconAssessment.tag = 0
-    iconAssessment.src = "./assets/images/expandir.png"
-    document.querySelector("#tableTag").innerHTML = null
-    refreshAssessment.style.display = "none"
-  } else {
-    iconAssessment.tag = 1
-    iconAssessment.src = "./assets/images/contrair.png"
-    refreshAssessment.style.display = null
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
-            var media = 0
-            for (e of json) {
-              media += (e.nota * e.peso)
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
-            }
-            grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
-            document.querySelector("#tableTag").innerHTML = grid
-            tableTag.focus()
-          })
-      )
-  }
-}
-
 const viewPDF = (id) => {
   const pdfDiv = document.querySelector('#pdfDiv')
   const pdfViewer = document.querySelector('#pdfViewer')
+  const loaderPDF = document.querySelector('#loaderPDF')
   if (pdfViewer) {
+    loaderPDF.classList.remove('loader')
     iconMaterial.src = "./assets/images/expandir.png"
-    const obj = document.querySelector('#pdfViewer')
-    pdfDiv.removeChild(obj)
+    pdfDiv.removeChild(pdfViewer)
   } else {
+    loaderPDF.classList.add('loader')
     iconMaterial.src = "./assets/images/contrair.png"
 
     var obj = document.createElement('object')
@@ -332,15 +257,104 @@ const viewPDF = (id) => {
     fetch(`${_address}material/disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
       .then(
         data => data.json()
-          .then(json =>
-            obj.data = 'data:application/pdf;base64,'.concat(json[0].content))
+          .then(json => {
+            obj.data = 'data:application/pdf;base64,'.concat(json[0].content)
+            loaderPDF.classList.remove('loader')
+          })
+          .catch(e => {
+            loaderPDF.classList.remove('loader')
+          })
+      )
+  }
+}
+
+const viewFazerAvaliacao = (id) => {
+  const iFazerAvaliacao = document.querySelector('#iconFazerAvaliacao')
+  const tFazerAvaliacao = document.querySelector('#tableFazerAvaliaxao')
+
+  if (iFazerAvaliacao.tag == 1) {
+    iFazerAvaliacao.tag = 0
+    iFazerAvaliacao.src = "./assets/images/expandir.png"
+    tFazerAvaliacao.innerHTML = null
+  } else {
+    iFazerAvaliacao.tag = 1
+    iFazerAvaliacao.src = "./assets/images/contrair.png"
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
+            for (e of json) {
+              situacao = e.nota ? "Avaliado" : e.entregue ? "Entregue" : "Aguardando"
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
+            }
+            tFazerAvaliacao.innerHTML = grid
+          })
+      )
+  }
+}
+
+const viewAvaliacao = (id, atualizar) => {
+  const iAvaliacao = document.querySelector('#iconAvaliacao')
+  const aAvaliacao = document.querySelector('#atualizaAvaliacao')
+  const tAvaliacao = document.querySelector('#tableAvaliacao')
+
+  if (iAvaliacao.tag == 1 && !atualizar) {
+    iAvaliacao.tag = 0
+    iAvaliacao.src = "./assets/images/expandir.png"
+    tAvaliacao.innerHTML = null
+    aAvaliacao.style.display = "none"
+  } else {
+    iAvaliacao.tag = 1
+    iAvaliacao.src = "./assets/images/contrair.png"
+    aAvaliacao.style.display = null
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
+            var media = 0
+            for (e of json) {
+              media += (e.nota * e.peso)
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
+            }
+            grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
+            tAvaliacao.innerHTML = grid
+          })
+      )
+  }
+}
+
+const viewAtendimento = (id, atualizar) => {
+  const iAtendimento = document.querySelector('#iconAtendimento')
+  const aAtendimento = document.querySelector('#atualizaAtendimento')
+  const tAtendimento = document.querySelector('#tableAtentimento')
+
+  if (iAtendimento.tag == 1 && !atualizar) {
+    iAtendimento.tag = 0
+    iAtendimento.src = "./assets/images/expandir.png"
+    tAtendimento.innerHTML = null
+    aAtendimento.style.display = "none"
+  } else {
+    iAtendimento.tag = 1
+    iAtendimento.src = "./assets/images/contrair.png"
+    aAtendimento.style.display = null
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var grid = '<tr> <th class="columnDescription">Solicitar atendimento relacionado a</th> <th class="columnValueLeft">Situação</th> </tr>'
+            for (e of json)
+              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
+            grid += `<tr> <td class="columnDescription">Outros assuntos</td> <td class="columnValueLeft">Aguardando retorno</td> </tr>`
+            tAtendimento.innerHTML = grid
+          })
       )
   }
 }
 
 const optionSubject = async (id) => {
   localStorage.setItem("page", `optionSubject_${id}`)
-
   detail.innerHTML = ` 
     <ul>
       <div class="headerGrid">
@@ -348,7 +362,10 @@ const optionSubject = async (id) => {
           <h2 id="subjectTag">Disciplina</h2>
           <h3 id="teacherTag">Professor</h3>
         </div>
-        <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de estudo">
+        <div class="headerGrid">
+          <div id="loaderPDF"></div>
+          <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de estudo">
+        </div>
       </div>
       <li><div id="pdfDiv"></div></li>
     </ul>
@@ -356,13 +373,13 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Fazer avaliações</h2>
         <div class="headerGrid">
-          <img id="iconDoAssessment" onclick="viewDoAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de avaliação">
+          <img id="iconFazerAvaliacao" onclick="viewFazerAvaliacao('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de avaliação">
         </div>
       </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
-            <table id="tableTagDoAssessment"></table>
+            <table id="tableFazerAvaliaxao"></table>
           </section>
         </div>
       </li>
@@ -371,14 +388,14 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Acompanhar avaliações</h2>
         <div class="headerGrid">
-          <img id="refreshAssessment" onclick="viewAssessment('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar notas das avaliações">
-          <img id="iconAssessment" onclick="viewAssessment('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair notas das avaliações">
+          <img id="atualizaAvaliacao" onclick="viewAvaliacao('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar notas das avaliações">
+          <img id="iconAvaliacao" onclick="viewAvaliacao('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair notas das avaliações">
         </div>
       </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
-            <table id="tableTag"></table>
+            <table id="tableAvaliacao"></table>
           </section>
         </div>
       </li>
@@ -387,24 +404,24 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Solicitar atendimento</h2>
         <div class="headerGrid">
-          <img id="refreshRequestService" onclick="viewRequestService('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar solicitação de atendimento">
-          <img id="iconRequestService" onclick="viewRequestService('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair solicitação de atendimento">
+          <img id="atualizaAtendimento" onclick="viewAtendimento('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar solicitação de atendimento">
+          <img id="iconAtendimento" onclick="viewAtendimento('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair solicitação de atendimento">
         </div>
       </div>
       <li>
         <div>
           <section id="listasRequestService" class="secao-listas">
-            <table id="tableTagRequestService"></table>
+            <table id="tableAtentimento"></table>
           </section>
         </div>
       </li>
     </ul>
     `
-  refreshAssessment.style.display = "none"
-  refreshRequestService.style.display = "none"
+  document.querySelector('#atualizaAvaliacao').style.display = "none"
+  document.querySelector('#atualizaAtendimento').style.display = "none"
 
-  iconAssessment.tag = 0
-  iconRequestService.tag = 0
+  iconAvaliacao.tag = 0
+  document.querySelector('iconAtendimento').tag = 0
   fetch(`${_address}disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
     .then(data => data.json()
       .then(json => {
