@@ -1,5 +1,5 @@
-const _address = 'https://senacserverpi.herokuapp.com/api/'
-//const _address = 'http://127.0.0.1:3333/api/'
+//const _address = 'https://senacserverpi.herokuapp.com/api/'
+const _address = 'http://127.0.0.1:3333/api/'
 var _token = null
 var _userName = null
 var _userId = null
@@ -145,7 +145,7 @@ const rematriculaMenuEvent = (e) => {
     <ul>
       <div class="headerGrid">
         <h2>Histórico de disciplinas</h2>
-        <img id="iconProximoSemestre" onclick="viewProximoSemestre('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+        <img id="iconProximoSemestre" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
       </div>
       <li>
         <div>
@@ -184,10 +184,11 @@ const optionListsEvent = (e) => {
   hideMenu()
 }
 
-const viewProximoSemestre = (id, semestre) => {
+const viewCursoHistorico = (id, semestre) => {
   if (iconProximoSemestre.tag == 1) {
     iconProximoSemestre.tag = 0
     iconProximoSemestre.src = "./assets/images/expandir.png"
+    tableHistoricoTag.innerHTML = null
     tableProximoSemestreTag.innerHTML = null
   } else {
     iconProximoSemestre.tag = 1
