@@ -40,17 +40,18 @@ const card = (element) => {
 }
 
 const getDataRoute = (route) => {
-  fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
-    .then(resp => resp.json()
-      .then(dados => {
-        if (dados) {
-          dados.sort((a, b) => a.nome > b.nome ? 1 : -1)
-            .forEach(element =>
-              document.querySelector("#listas").appendChild(card(element))
-            )
-        }
-      })
-    )
+  fetch(_address + route,
+    { headers: { "Authorization": "Bearer " + _token } }
+  ).then(resp => resp.json()
+    .then(dados => {
+      if (dados) {
+        dados.sort((a, b) => a.nome > b.nome ? 1 : -1)
+          .forEach(element =>
+            document.querySelector("#listas").appendChild(card(element))
+          )
+      }
+    })
+  )
 }
 
 const menu = document.querySelector('#menu')
@@ -145,19 +146,19 @@ const rematriculaMenuEvent = (e) => {
     <ul>
       <div class="headerGrid">
         <h2>Histórico de disciplinas</h2>
-        <img id="iconProximoSemestre" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+        <img id="iconHistorico" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
       </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
-            <table id="tableProximoSemestreTag"></table>
+            <table id="tableProximoSemestre"></table>
           </section>
         </div>
       </li>
       <li>
         <div>
           <section id="listas" class="secao-listas">
-            <table id="tableHistoricoTag"></table>
+            <table id="tableAnteriorSemestre"></table>
           </section>
         </div>
       </li>
@@ -185,53 +186,57 @@ const optionListsEvent = (e) => {
 }
 
 const viewCursoHistorico = (id, semestre) => {
-  if (iconProximoSemestre.tag == 1) {
-    iconProximoSemestre.tag = 0
-    iconProximoSemestre.src = "./assets/images/expandir.png"
-    tableHistoricoTag.innerHTML = null
-    tableProximoSemestreTag.innerHTML = null
+  const iHistorico = document.querySelector('#iconHistorico')
+  const tProximoSemestre = document.querySelector('#tableProximoSemestre')
+  const tAnteriorSemestre = document.querySelector('#tableAnteriorSemestre')
+  if (iHistorico.tag == 1) {
+    iHistorico.tag = 0
+    iHistorico.src = "./assets/images/expandir.png"
+    tProximoSemestre.innerHTML = null
+    tAnteriorSemestre.innerHTML = null
   } else {
-    iconProximoSemestre.tag = 1
-    iconProximoSemestre.src = "./assets/images/contrair.png"
+    iHistorico.tag = 1
+    iHistorico.src = "./assets/images/contrair.png"
 
-    fetch(`${_address}curso/disciplina/${id}?semestre=${semestre}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = `<tr><th class="columnDescription">${semestre}º - semestre</th></tr>`
-            for (e of json)
-              grid += `<tr><td class="columnDescription">${e.descricao}</td></tr>`
-            tableProximoSemestreTag.innerHTML = grid
-            tableProximoSemestreTag.focus()
-          })
-      )
+    fetch(`${_address}curso/disciplina/${id}?semestre=${semestre}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          var grid = `<tr><th class="columnDescription">${semestre}º - semestre</th></tr>`
+          for (e of json)
+            grid += `<tr><td class="columnDescription">${e.descricao}</td></tr>`
+          tProximoSemestre.innerHTML = grid
+        })
+    )
 
-    fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var semestre = 0
-            var grid = `<tr>
-                          <th class="columnDescription">Semestres anteriores</th>
-                          <th class="columnValue">Nota</th>
-                        </tr>`
+    fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          var semestre = 0
+          var grid = `<tr>
+                        <th class="columnDescription">Semestres anteriores</th>
+                        <th class="columnValue">Nota</th>
+                      </tr>`
 
-            for (e of json) {
-              if (semestre != e.semestre) {
-                semestre = e.semestre
-                grid += `<tr>
-                           <th class="columnDescription">${semestre}º - Semestre</th>
-                           <th class="columnValue"></th>
-                         </tr>`
-              }
-              grid += `<tr> 
-                         <td class="columnDescription">${e.descricao}</td>
-                         <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
+          for (e of json) {
+            if (semestre != e.semestre) {
+              semestre = e.semestre
+              grid += `<tr>
+                         <th class="columnDescription">${semestre}º - Semestre</th>
+                         <th class="columnValue"></th>
                        </tr>`
             }
-            tableHistoricoTag.innerHTML = grid
-          })
-      )
+            grid += `<tr> 
+                       <td class="columnDescription">${e.descricao}</td>
+                       <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
+                     </tr>`
+          }
+          tAnteriorSemestre.innerHTML = grid
+        })
+    )
   }
 }
 
@@ -254,17 +259,16 @@ const viewPDF = (id) => {
     pdfDiv.appendChild(obj)
     pdfDiv.focus()
 
-    fetch(`${_address}material/disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            obj.data = 'data:application/pdf;base64,'.concat(json[0].content)
-            loaderPDF.classList.remove('loader')
-          })
-          .catch(e => {
-            loaderPDF.classList.remove('loader')
-          })
-      )
+    fetch(`${_address}material/disciplina/${id}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          obj.data = 'data:application/pdf;base64,'.concat(json[0].content)
+          loaderPDF.classList.remove('loader')
+        })
+        .catch(e => loaderPDF.classList.remove('loader'))
+    )
   }
 }
 
@@ -279,18 +283,20 @@ const viewFazerAvaliacao = (id) => {
   } else {
     iFazerAvaliacao.tag = 1
     iFazerAvaliacao.src = "./assets/images/contrair.png"
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
-            for (e of json) {
-              situacao = e.nota ? "Avaliado" : e.entregue ? "Entregue" : "Aguardando"
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
-            }
-            tFazerAvaliacao.innerHTML = grid
-          })
-      )
+
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          var grid = '<tr> <th class="columnDescription">Tipos de avaliações</th> <th class="columnValueLeft">Situação</th> </tr>'
+          for (e of json) {
+            situacao = e.nota ? "Avaliado" : e.entregue ? "Entregue" : "Aguardando"
+            grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">${situacao}</td> </tr>`
+          }
+          tFazerAvaliacao.innerHTML = grid
+        })
+    )
   }
 }
 
@@ -308,20 +314,21 @@ const viewAvaliacao = (id, atualizar) => {
     iAvaliacao.tag = 1
     iAvaliacao.src = "./assets/images/contrair.png"
     aAvaliacao.style.display = null
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
-            var media = 0
-            for (e of json) {
-              media += (e.nota * e.peso)
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
-            }
-            grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
-            tAvaliacao.innerHTML = grid
-          })
-      )
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          var grid = '<tr> <th class="columnDescription">Avaliação</th> <th class="columnValue">Nota</th> </tr>'
+          var media = 0
+          for (e of json) {
+            media += (e.nota * e.peso)
+            grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
+          }
+          grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
+          tAvaliacao.innerHTML = grid
+        })
+    )
   }
 }
 
@@ -339,17 +346,18 @@ const viewAtendimento = (id, atualizar) => {
     iAtendimento.tag = 1
     iAtendimento.src = "./assets/images/contrair.png"
     aAtendimento.style.display = null
-    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`, { headers: { "Authorization": "Bearer " + _token } })
-      .then(
-        data => data.json()
-          .then(json => {
-            var grid = '<tr> <th class="columnDescription">Solicitar atendimento relacionado a</th> <th class="columnValueLeft">Situação</th> </tr>'
-            for (e of json)
-              grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
-            grid += `<tr> <td class="columnDescription">Outros assuntos</td> <td class="columnValueLeft">Aguardando retorno</td> </tr>`
-            tAtendimento.innerHTML = grid
-          })
-      )
+    fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
+      { headers: { "Authorization": "Bearer " + _token } }
+    ).then(
+      data => data.json()
+        .then(json => {
+          var grid = '<tr> <th class="columnDescription">Solicitar atendimento relacionado a</th> <th class="columnValueLeft">Situação</th> </tr>'
+          for (e of json)
+            grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValueLeft">Sem solicitações</td> </tr>`
+          grid += `<tr> <td class="columnDescription">Outros assuntos</td> <td class="columnValueLeft">Aguardando retorno</td> </tr>`
+          tAtendimento.innerHTML = grid
+        })
+    )
   }
 }
 
@@ -422,23 +430,23 @@ const optionSubject = async (id) => {
   document.querySelector('#atualizaAvaliacao').style.display = "none"
   document.querySelector('#atualizaAtendimento').style.display = "none"
 
-  fetch(`${_address}disciplina/${id}`, { headers: { "Authorization": "Bearer " + _token } })
-    .then(data => data.json()
-      .then(json => {
-        document.querySelector("#subjectTag").innerHTML = json[0].descricao
-        _teacher = json[0].codigo_professor
+  fetch(`${_address}disciplina/${id}`,
+    { headers: { "Authorization": "Bearer " + _token } }
+  ).then(data => data.json()
+    .then(json => {
+      document.querySelector("#subjectTag").innerHTML = json[0].descricao
+      _teacher = json[0].codigo_professor
 
-        fetch(`${_address}professor/${_teacher}`, { headers: { "Authorization": "Bearer " + _token } })
-          .then(data => data.json()
-            .then(json => {
-              document.querySelector("#teacherTag").innerHTML = json[0].nome
-            })
-          )
-      })
-    )
-  console.log('antes hide')
+      fetch(`${_address}professor/${_teacher}`,
+        { headers: { "Authorization": "Bearer " + _token } }
+      ).then(data => data.json()
+        .then(json => {
+          document.querySelector("#teacherTag").innerHTML = json[0].nome
+        })
+      )
+    })
+  )
   hideMenu()
-  console.log('depois hide')
 }
 
 loginBack.addEventListener("click", e => {
@@ -580,7 +588,7 @@ const doLogin = async (email, password) => {
     setTimeout(() => document.querySelector('#errorMessage').innerHTML = null, 5000)
   } else {
     const data = await response.json()
-    localStorage.setItem("token", data.token)
+    localStorage.setItem('token', data.token)
     localStorage.setItem('userName', data.reg.nome)
     localStorage.setItem('userId', data.reg.codigo)
     localStorage.setItem('image', data.reg.imagem)
