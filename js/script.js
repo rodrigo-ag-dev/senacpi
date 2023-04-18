@@ -114,12 +114,12 @@ const optionHomeEvent = (e) => {
             <div class="inputText flex1 margin0">
               <input type="text" id="docForm" readonly><br><br>
             </div>
-            <p id="anexarButton" class="button">...</p>
+            <button type="button" id="anexarButton">...</button>
           </div>
         </form>        
         <div id="formBase">
-          <p id="confirmOk" class="button">Ok</p>
-          <p id="clear" class="button">Limpar</p>
+          <button id="confirmOk" type="button" autofocus>Ok</button>
+          <button id="clear" type="button">Limpar</button>
         </div>
       </li>
     </ul>
@@ -473,7 +473,7 @@ welcome.addEventListener("click", e => {
             </div>
           </form>        
           <div id="loginBase">
-            <p id="loginOk" class="button">Ok</p>
+            <button type="button"  id="loginOk">Ok</button>
             <p id="errorMessage"></p>
           </div>
         </div>
@@ -587,6 +587,5 @@ const doLogin = async (email, password) => {
     doLoad()
   }
 }
-
 
 window.addEventListener('load', doLoad);
