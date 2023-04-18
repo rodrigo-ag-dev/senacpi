@@ -62,11 +62,12 @@ tr:nth-child(even) {
   margin-inline: 5px;
   cursor: pointer;
   transition: all .5s;
+  margin-bottom: 5px;
 }
 
 .headerGrid img:hover {
   border-radius: 50%;
-  background-color: rgb(79, 98, 221);
+  background-color: #ec891b;
 }
 
 .columnValue {
@@ -124,12 +125,13 @@ header rect {
   transition: all .5s;
   width: 40px;
   height: 40px;
+  margin-right: 10px;
 }
 
 #btnMenu:hover {
   border-radius: 50%;
   cursor: pointer;
-  background-color: rgb(79, 98, 221);
+  background-color: #ec891b;
 }
 
 #btnMenu:active {
@@ -174,7 +176,7 @@ header rect {
 }
 
 .menu ul li a:hover {
-  background-color: rgb(79, 98, 221);
+  background-color: #ec891b;
 }
 
 .effect {
