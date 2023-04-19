@@ -147,8 +147,8 @@ const optionHomeEvent = (e) => {
       e.value = ''
       e.classList.remove('inputError')
     }
-    console.log('_arquivosSelecionados', _arquivosSelecionados)
     _arquivosSelecionados = []
+    viewCaixaArquivos()
     eForm[0].focus()
   })
 
@@ -200,6 +200,7 @@ const viewCaixaArquivos = () => {
       for (f of e) {
         const titulo = document.createElement('span')
         titulo.innerHTML = f.name
+        titulo.classList.add('tituloSpan')
 
         const removeButton = document.createElement('button')
         removeButton.type = 'button'

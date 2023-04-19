@@ -737,6 +737,10 @@ label {
   transition: background .3s;
 }
 
+.tituloSpan {
+  overflow: hidden;
+}
+
 .removeButton:focus {
   background-color: rgb(0, 69, 132);
   cursor: pointer;
