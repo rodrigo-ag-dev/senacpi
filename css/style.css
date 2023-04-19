@@ -647,7 +647,7 @@ label {
   }
 }
 
-button {
+.button {
   margin: 0px;
   padding-top: 5px;
   margin-right: 5px;
@@ -666,12 +666,12 @@ button {
   transition: background .3s;
 }
 
-button:focus {
+.button:focus {
   background-color: rgb(0, 69, 132);
   cursor: pointer;
 }
 
-button:hover {
+.button:hover {
   background-color: #ec891b;
   cursor: pointer;
 }
@@ -683,4 +683,66 @@ button:hover {
 
 .inputError {
   border: 3px solid rgb(255, 207, 204);
+}
+
+.imgPreview {
+  width: 30px;
+  height: 30px;
+}
+
+.imgPreview :hover {
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+.anexos {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.boxAttach {
+  display: flex;
+  flex: 1;
+  border-radius: 2px;
+  border: 1px solid #999;
+  align-items: center;
+  padding: 2px;
+  min-height: 45px;
+}
+
+.fileAttach {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 250px;
+  padding: 2px;
+  padding-left: 5px;
+  border-radius: 2px;
+  border: 1px solid lightslategrey;
+  margin-right: 5px;
+}
+
+.removeButton {
+  margin: 0px;
+  display: flex;
+  padding: 5px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #bbb;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  transition: background .3s;
+}
+
+.removeButton:focus {
+  background-color: rgb(0, 69, 132);
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: lightcoral;
+  cursor: pointer;
 }

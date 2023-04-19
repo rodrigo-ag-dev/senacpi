@@ -6,6 +6,7 @@ var _userId = null
 var _curso = null
 var _cursoDescricao = null
 var _semestre = null
+var _arquivosSelecionados = []
 
 const getImageRoute = async (element, route) => {
   const response = await fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
@@ -111,21 +112,19 @@ const optionHomeEvent = (e) => {
           </div>
           <label for="campoDocumentos">Envie cópias digitáis dos seguintes documentos</label>
           <p>Foto 3x4, CPF, RG, Histórico escolares</p>
-          <div class="headerGrid">
-            <div class="inputText flex1 margin0">
-              <input type="text" id="campoDocumentos" readonly><br><br>
+          <div class="anexos">
+            <div id="caixaArquivos" class="boxAttach">
             </div>
-            <button id="anexarButton" type="button">...</button>
+            <button class="button" id="anexarButton" type="button">...</button>
           </div>
         </form>        
         <div id="formBase">
-          <button id="confirmForm" type="button">Ok</button>
-          <button id="clearForm" type="button">Limpar</button>
+          <button class="button" id="confirmForm" type="button">Ok</button>
+          <button class="button" id="clearForm" type="button">Limpar</button>
         </div>
       </li>
     </ul>
     `
-
   const eForm = document.querySelector('#inscricaoForm')
   const eClear = document.querySelector('#clearForm')
   const eConfirm = document.querySelector('#confirmForm')
@@ -135,8 +134,9 @@ const optionHomeEvent = (e) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.onchange = _ => {
-      let files = Array.from(input.files);
-      console.log(files);
+      const files = Array.from(input.files);
+      _arquivosSelecionados.push(files)
+      viewCaixaArquivos()
     };
     input.click();
   })
@@ -147,6 +147,8 @@ const optionHomeEvent = (e) => {
       e.value = ''
       e.classList.remove('inputError')
     }
+    console.log('_arquivosSelecionados', _arquivosSelecionados)
+    _arquivosSelecionados = []
     eForm[0].focus()
   })
 
@@ -171,6 +173,50 @@ const optionHomeEvent = (e) => {
   eForm[0].focus()
   localStorage.setItem("page", "optionHome")
   hideMenu()
+}
+
+const removeAttach = (file) => {
+  for (e of _arquivosSelecionados) {
+    for (f of e) {
+      if (file.fileName == f.name) {
+        const index = e.indexOf(f)
+        const indexArray = _arquivosSelecionados.indexOf(e)
+        if (index > -1 && indexArray > -1) {
+          e.splice(index, 1)
+          if (e.length == 0)
+            _arquivosSelecionados.splice(indexArray, 1)
+        }
+      }
+    }
+  }
+  viewCaixaArquivos()
+}
+
+const viewCaixaArquivos = () => {
+  const eAttachBox = document.querySelector('#caixaArquivos')
+  eAttachBox.innerHTML = ``
+  if (eAttachBox) {
+    for (e of _arquivosSelecionados) {
+      for (f of e) {
+        const titulo = document.createElement('span')
+        titulo.innerHTML = f.name
+
+        const removeButton = document.createElement('button')
+        removeButton.type = 'button'
+        removeButton.classList.add('removeButton')
+        removeButton.innerHTML = 'X'
+        removeButton.fileName = f.name
+        removeButton.onclick = () => removeAttach(removeButton)
+
+        const card = document.createElement('div')
+        card.classList.add("fileAttach")
+        card.appendChild(titulo)
+        card.appendChild(removeButton)
+
+        eAttachBox.appendChild(card)
+      }
+    }
+  }
 }
 
 const rematriculaMenuEvent = (e) => {
@@ -524,7 +570,7 @@ welcome.addEventListener("click", e => {
             </div>
           </form>        
           <div id="loginBase">
-            <button type="button"  id="loginOk">Ok</button>
+            <button class="button" id="loginOk" type="button">Ok</button>
             <p id="errorMessage"></p>
           </div>
         </div>
