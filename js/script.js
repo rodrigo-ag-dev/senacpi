@@ -8,6 +8,9 @@ var _cursoDescricao = null
 var _semestre = null
 var _arquivosSelecionados = []
 
+const _mfApresentacao = 'Apresentação'
+const _mfRematriculaHistorico = 'Rematrícula/Histórico'
+
 const getImageRoute = async (element, route) => {
   const response = await fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
   const data = await response.json()
@@ -89,7 +92,7 @@ const optionHomeEvent = (e) => {
   detail.innerHTML = `
     <ul>
       <h5> </h5>
-      <h2>Apresentação</h2>
+      <h2>${_mfApresentacao}</h2>
       <li>
         <div>
           <p>Deseja ser aluno da melhor universidade do país?</p>
@@ -251,7 +254,7 @@ const rematriculaMenuEvent = (e) => {
   detail.innerHTML = ` 
     <ul>
       <h5> </h5>
-      <h2>Rematricula</h2>
+      <h2>${_mfRematriculaHistorico}</h2>
       <li>
         <div>
           <p>O semestre ainda não foi concluído, aguarde o fechamento de todas as notas.</p>
@@ -261,8 +264,8 @@ const rematriculaMenuEvent = (e) => {
     </ul>
     <ul>
       <div class="headerGrid">
-        <h2>Histórico de disciplinas</h2>
-        <img id="iconHistorico" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+        <h2>Disciplinas para o próximo semestre</h2>
+        <img id="iconProximoSemestre" onclick="viewProximoSemestre('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
       </div>
       <li>
         <div>
@@ -271,6 +274,12 @@ const rematriculaMenuEvent = (e) => {
           </section>
         </div>
       </li>
+    </ul>
+    <ul>
+      <div class="headerGrid">
+        <h2>Histórico do semestre atual e dos anteriores</h2>
+        <img id="iconHistorico" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+      </div>
       <li>
         <div>
           <section id="listas" class="secao-listas">
@@ -301,18 +310,16 @@ const optionListsEvent = (e) => {
   hideMenu()
 }
 
-const viewCursoHistorico = (id, semestre) => {
-  const iHistorico = document.querySelector('#iconHistorico')
+const viewProximoSemestre = (id, semestre) => {
+  const iProximoSemestre = document.querySelector('#iconProximoSemestre')
   const tProximoSemestre = document.querySelector('#tableProximoSemestre')
-  const tAnteriorSemestre = document.querySelector('#tableAnteriorSemestre')
-  if (iHistorico.tag == 1) {
-    iHistorico.tag = 0
-    iHistorico.src = "./assets/images/expandir.png"
+  if (iProximoSemestre.tag == 1) {
+    iProximoSemestre.tag = 0
+    iProximoSemestre.src = "./assets/images/expandir.png"
     tProximoSemestre.innerHTML = null
-    tAnteriorSemestre.innerHTML = null
   } else {
-    iHistorico.tag = 1
-    iHistorico.src = "./assets/images/contrair.png"
+    iProximoSemestre.tag = 1
+    iProximoSemestre.src = "./assets/images/contrair.png"
 
     fetch(`${_address}curso/disciplina/${id}?semestre=${semestre}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -325,6 +332,19 @@ const viewCursoHistorico = (id, semestre) => {
           tProximoSemestre.innerHTML = grid
         })
     )
+  }
+}
+
+const viewCursoHistorico = (id, semestre) => {
+  const iHistorico = document.querySelector('#iconHistorico')
+  const tAnteriorSemestre = document.querySelector('#tableAnteriorSemestre')
+  if (iHistorico.tag == 1) {
+    iHistorico.tag = 0
+    iHistorico.src = "./assets/images/expandir.png"
+    tAnteriorSemestre.innerHTML = null
+  } else {
+    iHistorico.tag = 1
+    iHistorico.src = "./assets/images/contrair.png"
 
     fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -629,7 +649,7 @@ const doLoad = async () => {
   const token = localStorage.getItem("token")
   _token = token
 
-  let htmlMenuOptions = `<li><a id="optionHome" href="#">Apresentação</a></li> `
+  let htmlMenuOptions = `<li><a id="optionHome" href="#">${_mfApresentacao}</a></li> `
 
   _image = localStorage.getItem("image")
   _userId = localStorage.getItem("userId")
@@ -665,7 +685,7 @@ const doLoad = async () => {
       })
     }
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
-    htmlMenuOptions += `<li><a id="rematriculaMenu" href="#">Rematricula</a></li> `
+    htmlMenuOptions += `<li><a id="rematriculaMenu" href="#">${_mfRematriculaHistorico}</a></li> `
 
     htmlMenuOptions += `<br /><div class="divider"></div><br />`
     htmlMenuOptions += `<li><a id="optionLists" href="#">Equipe de desenvolvimento</a></li> `

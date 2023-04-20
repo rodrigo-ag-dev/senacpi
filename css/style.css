@@ -15,6 +15,10 @@ body {
   background-color: #eee;
 }
 
+footer {
+  min-height: 15px;
+}
+
 table {
   table-layout: auto;
   width: 100%;
