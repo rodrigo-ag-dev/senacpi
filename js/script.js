@@ -347,32 +347,28 @@ const viewCursoHistorico = (id, semestre) => {
     iHistorico.src = "./assets/images/contrair.png"
 
     fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`,
-      { headers: { "Authorization": "Bearer " + _token } }
-    ).then(
-      data => data.json()
-        .then(json => {
-          var semestre = 0
-          var grid = `<tr>
-                        <th class="columnDescription">Semestres anteriores</th>
-                        <th class="columnValue">Nota</th>
-                      </tr>`
-
-          for (e of json) {
-            if (semestre != e.semestre) {
-              semestre = e.semestre
-              grid += `<tr>
-                         <th class="columnDescription">${semestre}º - Semestre</th>
-                         <th class="columnValue"></th>
+      { headers: { "Authorization": "Bearer " + _token } })
+      .then(
+        data => data.json()
+          .then(json => {
+            var cabSemestre = parseInt(semestre)
+            var grid = ``
+            for (e of json) {
+              if (cabSemestre != e.semestre) {
+                cabSemestre = e.semestre
+                grid += `<tr> 
+                           <th class="columnDescription">${cabSemestre}º - Semestre${_semestre == cabSemestre ? ' - ( Atual )' : ''}</th>
+                           <th class="columnValue">Nota</th>
+                         </tr>`
+              }
+              grid += `<tr> 
+                         <td class="columnDescription">${e.descricao}</td>
+                         <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
                        </tr>`
             }
-            grid += `<tr> 
-                       <td class="columnDescription">${e.descricao}</td>
-                       <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
-                     </tr>`
-          }
-          tAnteriorSemestre.innerHTML = grid
-        })
-    )
+            tAnteriorSemestre.innerHTML = grid
+          })
+      )
   }
 }
 
