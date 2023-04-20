@@ -63,9 +63,13 @@ const detail = document.querySelector('#detail')
 const hideMenu = () => {
   mcl.add('hide')
   mcl.remove('show')
+  loginBack.style.width = '0px'
+  loginBack.style.height = '0px'
 }
 
 const showMenu = () => {
+  loginBack.style.width = '100%'
+  loginBack.style.height = '100%'
   mcl.add('show')
   mcl.remove('hide')
 }
@@ -564,8 +568,7 @@ const optionSubject = async (id) => {
 loginBack.addEventListener("click", e => {
   e.preventDefault()
   if (e.target.id == 'loginBack') {
-    loginBack.style.width = '0px'
-    loginBack.style.height = '0px'
+    hideMenu()
     doLoad()
   }
 })
@@ -633,6 +636,14 @@ const doLoad = async () => {
   _userName = localStorage.getItem("userName")
   _welcome = document.querySelector('#welcome')
 
+  if (_userName) {
+    _welcome.innerHTML = 'Olá ' + _userName
+    getImageRoute(perfilImage, "aluno/imagem/" + _image)
+  } else {
+    _welcome.innerHTML = 'Fazer login'
+    perfilImage.src = './assets/images/perfil.jpg'
+  }
+
   if (token) {
     const fetchAluno = await fetch(_address + 'aluno/' + _userId, { headers: { "Authorization": "Bearer " + _token } })
     const jsonAluno = await fetchAluno.json()
@@ -671,14 +682,6 @@ const doLoad = async () => {
 
     if (rematriculaMenu)
       rematriculaMenu.addEventListener("click", e => rematriculaMenuEvent(e))
-  }
-
-  if (_userName) {
-    _welcome.innerHTML = 'Olá ' + _userName
-    getImageRoute(perfilImage, "aluno/imagem/" + _image)
-  } else {
-    _welcome.innerHTML = 'Fazer login'
-    perfilImage.src = './assets/images/perfil.jpg'
   }
 
   const page = localStorage.getItem("page")
