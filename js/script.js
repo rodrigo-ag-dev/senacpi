@@ -143,18 +143,29 @@ const optionHomeEvent = (e) => {
 
   eClear.addEventListener("click", e => {
     e.preventDefault()
-    for (e of eForm) {
-      e.value = ''
-      e.classList.remove('inputError')
+    if (eClear.classList.contains('removeButtonSelected')) {
+      eClear.classList.remove('removeButtonSelected')
+      eClear.innerHTML = 'Limpar'
+      for (e of eForm) {
+        e.value = ''
+        e.classList.remove('inputError')
+      }
+      _arquivosSelecionados = []
+      eForm[0].focus()
+      viewCaixaArquivos()
+    } else {
+      clearTimeOutAll()
+      eClear.classList.add('removeButtonSelected')
+      eClear.innerHTML = '!'
+      setTimeout(() => {
+        eClear.classList.remove('removeButtonSelected')
+        eClear.innerHTML = 'Limpar'
+      }, 2000)
     }
-    _arquivosSelecionados = []
-    viewCaixaArquivos()
-    eForm[0].focus()
   })
 
   eConfirm.addEventListener("click", e => {
     e.preventDefault()
-    var camposVazio = ''
     const labels = document.getElementsByTagName('LABEL');
     for (l of labels) {
       if (l.htmlFor != '') {
@@ -165,9 +176,6 @@ const optionHomeEvent = (e) => {
           e.classList.remove('inputError')
       }
     }
-    if (camposVazio)
-      console.log(camposVazio)
-    //eClear.click()
   })
 
   eForm[0].focus()
@@ -175,21 +183,35 @@ const optionHomeEvent = (e) => {
   hideMenu()
 }
 
-const removeAttach = (file) => {
-  for (e of _arquivosSelecionados) {
-    for (f of e) {
-      if (file.fileName == f.name) {
-        const index = e.indexOf(f)
-        const indexArray = _arquivosSelecionados.indexOf(e)
-        if (index > -1 && indexArray > -1) {
-          e.splice(index, 1)
-          if (e.length == 0)
-            _arquivosSelecionados.splice(indexArray, 1)
+const removeAttach = (element) => {
+  if (element.classList.contains('removeButtonSelected')) {
+    for (e of _arquivosSelecionados) {
+      for (f of e) {
+        if (element.fileName == f.name) {
+          const index = e.indexOf(f)
+          const indexArray = _arquivosSelecionados.indexOf(e)
+          if (index > -1 && indexArray > -1) {
+            e.splice(index, 1)
+            if (e.length == 0)
+              _arquivosSelecionados.splice(indexArray, 1)
+          }
         }
       }
     }
+    viewCaixaArquivos()
+  } else {
+    element.classList.add('removeButtonSelected')
+    element.innerHTML = '!'
+
+    const eAttach = document.querySelector('#anexarButton')
+    if (eAttach)
+      eAttach.focus()
+
+    setTimeout(() => {
+      element.classList.remove('removeButtonSelected')
+      element.innerHTML = 'X'
+    }, 2000)
   }
-  viewCaixaArquivos()
 }
 
 const viewCaixaArquivos = () => {
@@ -683,6 +705,13 @@ const doLogin = async (email, password) => {
     localStorage.setItem('userId', data.reg.codigo)
     localStorage.setItem('image', data.reg.imagem)
     doLoad()
+  }
+}
+
+const clearTimeOutAll = () => {
+  var id = window.setTimeout(() => { }, 0);
+  while (id--) {
+    window.clearTimeout(id);
   }
 }
 

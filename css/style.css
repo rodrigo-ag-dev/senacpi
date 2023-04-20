@@ -666,14 +666,16 @@ label {
   transition: background .3s;
 }
 
-.button:focus {
+.button:not(.removeButtonSelected):focus {
   background-color: rgb(0, 69, 132);
-  cursor: pointer;
 }
 
 .button:hover {
-  background-color: #ec891b;
   cursor: pointer;
+}
+
+.button:not(.removeButtonSelected):hover {
+  background-color: #ec891b;
 }
 
 #anexarButton {
@@ -721,32 +723,40 @@ label {
   padding-left: 5px;
   border-radius: 2px;
   border: 1px solid lightslategrey;
-  margin-right: 5px;
-}
-
-.removeButton {
-  margin: 0px;
-  display: flex;
-  padding: 5px;
-  border-radius: 2px;
-  color: #fff;
-  background-color: #bbb;
-  align-items: center;
-  justify-content: center;
-  margin-left: 5px;
-  transition: background .3s;
+  margin-left: 3px;
 }
 
 .tituloSpan {
   overflow: hidden;
 }
 
-.removeButton:focus {
+.removeButton {
+  margin: 0px;
+  display: flex;
+  padding: 5px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #bbb;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  transition: background .3s;
+  min-width: 20px;
+}
+
+.removeButton:not(.removeButtonSelected):focus {
   background-color: rgb(0, 69, 132);
+}
+
+.removeButton:not(.removeButtonSelected):hover {
+  background-color: lightcoral;
   cursor: pointer;
 }
 
-.removeButton:hover {
-  background-color: lightcoral;
+.removeButtonSelected {
+  background-color: red;
+}
+
+.removeButtonSelected {
   cursor: pointer;
 }
