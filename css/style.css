@@ -1,5 +1,6 @@
 :root {
-  --menu-size: 250px
+  --menu-size: 250px;
+  --color-hover-light: #ec891b55;
 }
 
 * {
@@ -20,28 +21,33 @@ footer {
 }
 
 table {
-  table-layout: auto;
   width: 100%;
+  overflow: hidden;
+  table-layout: auto;
   font-family: arial, sans-serif;
   border-collapse: collapse;
   min-width: 50px;
+  border-radius: 10px;
 }
 
 th {
-  border: 1px solid #dddddd;
   background-color: #cccccc;
   text-align: left;
   padding: 8px;
 }
 
 td {
-  border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
 }
 
 tr:nth-child(even) {
   background-color: #eeeeee;
+}
+
+tr:hover {
+  background-color: var(--color-hover-light);
+  cursor: default;
 }
 
 .headerGrid {
