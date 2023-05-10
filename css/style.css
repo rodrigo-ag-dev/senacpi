@@ -1,6 +1,8 @@
 :root {
   --menu-size: 250px;
+  --color-button: #777;
   --color-hover-light: #ec891b55;
+  --color-highlight: rgb(0, 69, 132);
 }
 
 * {
@@ -98,7 +100,7 @@ tr:hover {
 header {
   display: flex;
   flex-direction: row;
-  background-color: #222;
+  background-color: var(--color-highlight);
   padding: 10px;
   text-align: center;
   align-items: center;
@@ -131,11 +133,12 @@ header rect {
   align-items: center;
   cursor: pointer;
   padding: 10px;
-  background-color: #222;
+  background-color: var(--color-button);
   transition: all .5s;
   width: 40px;
   height: 40px;
   margin-right: 10px;
+  border-radius: 5px;
 }
 
 #btnMenu:hover {
@@ -166,7 +169,7 @@ header rect {
   top: 0;
   width: var(--menu-size);
   height: 100%;
-  background-color: #222;
+  background-color: var(--color-highlight);
 }
 
 .menu ul {
@@ -326,7 +329,7 @@ h5 {
 
 .content .capaTopo {
   margin-top: 15px;
-  background-color: rgb(0, 69, 132);
+  background-color: var(--color-highlight);
   min-height: 180px;
   max-height: 180px;
   height: 100px;
@@ -663,7 +666,7 @@ label {
   margin-right: 5px;
   right: 15px;
   color: #fff;
-  background-color: lightslategray;
+  background-color: var(--color-button);
   padding-block: 10px;
   border-radius: 5px;
   font-size: 15px;
@@ -677,7 +680,7 @@ label {
 }
 
 .button:not(.removeButtonSelected):focus {
-  background-color: rgb(0, 69, 132);
+  background-color: var(--color-highlight);
 }
 
 .button:hover {
@@ -686,6 +689,11 @@ label {
 
 .button:not(.removeButtonSelected):hover {
   background-color: #ec891b;
+}
+
+#loginOk {
+  width: 90%;
+  margin-inline: 10px;
 }
 
 #anexarButton {
@@ -755,7 +763,7 @@ label {
 }
 
 .removeButton:not(.removeButtonSelected):focus {
-  background-color: rgb(0, 69, 132);
+  background-color: var(--color-highlight);
 }
 
 .removeButton:not(.removeButtonSelected):hover {

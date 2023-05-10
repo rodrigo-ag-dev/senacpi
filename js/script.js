@@ -391,6 +391,8 @@ const viewPDF = (id) => {
     pdfDiv.appendChild(obj)
     pdfDiv.focus()
 
+    console.log('PDF', `${_address}material/disciplina/${id}`)
+
     fetch(`${_address}material/disciplina/${id}`,
       { headers: { "Authorization": "Bearer " + _token } }
     ).then(
