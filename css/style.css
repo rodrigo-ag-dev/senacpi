@@ -679,7 +679,7 @@ label {
   transition: background .3s;
 }
 
-.button:not(.removeButtonSelected):focus {
+.button:not(.removeButtonSelected, .removeButtonSelectedSend):focus {
   background-color: var(--color-highlight);
 }
 
@@ -687,7 +687,7 @@ label {
   cursor: pointer;
 }
 
-.button:not(.removeButtonSelected):hover {
+.button:not(.removeButtonSelected, .removeButtonSelectedSend):hover {
   background-color: #ec891b;
 }
 
@@ -762,19 +762,37 @@ label {
   min-width: 20px;
 }
 
-.removeButton:not(.removeButtonSelected):focus {
+.removeButton:not(.removeButtonSelected, .removeButtonSelectedSend):focus {
   background-color: var(--color-highlight);
 }
 
-.removeButton:not(.removeButtonSelected):hover {
+.removeButton:not(.removeButtonSelected, .removeButtonSelectedSend):hover {
   background-color: lightcoral;
   cursor: pointer;
 }
 
 .removeButtonSelected {
-  background-color: red;
+  background-color: lightcoral;
 }
 
-.removeButtonSelected {
+.removeButtonSelectedSend {
+  background-color: green;
+}
+
+.removeButtonSelected,
+.removeButtonSelectedSend {
   cursor: pointer;
+}
+
+#alertEvents {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 400px;
+  border-radius: 5px;
+  padding: 15px;
+  visibility: hidden;
+  background-color: lightblue;
+  text-align: center;
+  font-size: 25px;
 }

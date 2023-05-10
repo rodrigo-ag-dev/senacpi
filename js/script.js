@@ -126,7 +126,7 @@ const optionHomeEvent = (e) => {
           </div>
         </form>        
         <div id="formBase">
-          <button class="button" id="confirmForm" type="button">Ok</button>
+          <button class="button" id="confirmForm" type="button">Enviar</button>
           <button class="button" id="clearForm" type="button">Limpar</button>
         </div>
       </li>
@@ -150,7 +150,7 @@ const optionHomeEvent = (e) => {
 
   eClear.addEventListener("click", e => {
     e.preventDefault()
-    if (eClear.classList.contains('removeButtonSelected')) {
+    if (eClear.innerHTML == '!') {
       eClear.classList.remove('removeButtonSelected')
       eClear.innerHTML = 'Limpar'
       for (e of eForm) {
@@ -163,8 +163,11 @@ const optionHomeEvent = (e) => {
     } else {
       clearTimeOutAll()
       eClear.classList.add('removeButtonSelected')
+      alertEvents.innerHTML = 'Limpar todos os dados do formulário?'
+      alertEvents.style.cssText = 'visibility: unset;'
       eClear.innerHTML = '!'
       setTimeout(() => {
+        alertEvents.style.cssText = 'visibility: hidden;'
         eClear.classList.remove('removeButtonSelected')
         eClear.innerHTML = 'Limpar'
       }, 2000)
@@ -173,14 +176,34 @@ const optionHomeEvent = (e) => {
 
   eConfirm.addEventListener("click", e => {
     e.preventDefault()
-    const labels = document.getElementsByTagName('LABEL');
-    for (l of labels) {
-      if (l.htmlFor != '') {
-        const e = document.getElementById(l.htmlFor);
-        if (e.value == '')
-          e.classList.add('inputError')
-        else
-          e.classList.remove('inputError')
+    if (eConfirm.innerHTML == '?') {
+      alert('Em breve você vai receber mais informações em seu e-mail!')
+    } else {
+      let error = false
+      const labels = document.getElementsByTagName('LABEL');
+      for (l of labels) {
+        if (l.htmlFor != '') {
+          const e = document.getElementById(l.htmlFor);
+          if (e) {
+            error = error || (!e.value || e.value == '')
+            if (!e.value || e.value == '')
+              e.classList.add('inputError')
+            else
+              e.classList.remove('inputError')
+          }
+        }
+      }
+      if (!error) {
+        clearTimeOutAll()
+        eConfirm.classList.add('removeButtonSelectedSend')
+        alertEvents.innerHTML = 'Confirma o envio das informações?'
+        alertEvents.style.cssText = 'visibility: unset;'
+        eConfirm.innerHTML = '?'
+        setTimeout(() => {
+          eConfirm.classList.remove('removeButtonSelectedSend')
+          alertEvents.style.cssText = 'visibility: hidden;'
+          eConfirm.innerHTML = 'Enviar'
+        }, 2000)
       }
     }
   })
