@@ -186,9 +186,12 @@ const optionHomeEvent = (e) => {
           const e = document.getElementById(l.htmlFor);
           if (e) {
             error = error || (!e.value || e.value == '')
-            if (!e.value || e.value == '')
+            if (!e.value || e.value == '') {
               e.classList.add('inputError')
-            else
+              alertEvents.innerHTML = 'Os campos destacados são obrigatórios!'
+              alertEvents.style.cssText = 'visibility: unset;'
+              setTimeout(() => alertEvents.style.cssText = 'visibility: hidden;', 2000)
+            } else
               e.classList.remove('inputError')
           }
         }
