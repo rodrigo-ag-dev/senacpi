@@ -177,6 +177,11 @@ const optionHomeEvent = (e) => {
   eConfirm.addEventListener("click", e => {
     e.preventDefault()
     if (eConfirm.innerHTML == '?') {
+      alertEvents.style.cssText = 'visibility: hidden;'
+      for (e of eForm) {
+        e.value = ''
+        e.classList.remove('inputError')
+      }
       alert('Em breve você vai receber mais informações em seu e-mail!')
     } else {
       let error = false
