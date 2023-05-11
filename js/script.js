@@ -296,7 +296,7 @@ const rematriculaMenuEvent = (e) => {
     <ul>
       <div class="headerGrid">
         <h2>Disciplinas para o próximo semestre</h2>
-        <img id="iconProximoSemestre" onclick="viewProximoSemestre('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+        <img id="iconProximoSemestre" onclick="viewProximoSemestre('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair disciplinas para o próximo semestre">
       </div>
       <li>
         <div>
@@ -309,7 +309,7 @@ const rematriculaMenuEvent = (e) => {
     <ul>
       <div class="headerGrid">
         <h2>Histórico do semestre atual e dos anteriores</h2>
-        <img id="iconHistorico" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair disciplinas para o próximo semestre">
+        <img id="iconHistorico" onclick="viewCursoHistorico('${_curso}','${_semestre + 1}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair disciplinas para o próximo semestre">
       </div>
       <li>
         <div>
@@ -346,11 +346,11 @@ const viewProximoSemestre = (id, semestre) => {
   const tProximoSemestre = document.querySelector('#tableProximoSemestre')
   if (iProximoSemestre.tag == 1) {
     iProximoSemestre.tag = 0
-    iProximoSemestre.src = "./assets/images/expandir.png"
+    iProximoSemestre.src = "./assets/images/Expandir.png"
     tProximoSemestre.innerHTML = null
   } else {
     iProximoSemestre.tag = 1
-    iProximoSemestre.src = "./assets/images/contrair.png"
+    iProximoSemestre.src = "./assets/images/Contrair.png"
 
     fetch(`${_address}curso/disciplina/${id}?semestre=${semestre}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -371,11 +371,11 @@ const viewCursoHistorico = (id, semestre) => {
   const tAnteriorSemestre = document.querySelector('#tableAnteriorSemestre')
   if (iHistorico.tag == 1) {
     iHistorico.tag = 0
-    iHistorico.src = "./assets/images/expandir.png"
+    iHistorico.src = "./assets/images/Expandir.png"
     tAnteriorSemestre.innerHTML = null
   } else {
     iHistorico.tag = 1
-    iHistorico.src = "./assets/images/contrair.png"
+    iHistorico.src = "./assets/images/Contrair.png"
 
     fetch(`${_address}avaliacao/historico/${id}?codigo_aluno=${_userId}&semestreanteriores=${semestre}`,
       { headers: { "Authorization": "Bearer " + _token } })
@@ -409,11 +409,11 @@ const viewPDF = (id) => {
   const loaderPDF = document.querySelector('#loaderPDF')
   if (pdfViewer) {
     loaderPDF.classList.remove('loader')
-    iconMaterial.src = "./assets/images/expandir.png"
+    iconMaterial.src = "./assets/images/Expandir.png"
     pdfDiv.removeChild(pdfViewer)
   } else {
     loaderPDF.classList.add('loader')
-    iconMaterial.src = "./assets/images/contrair.png"
+    iconMaterial.src = "./assets/images/Contrair.png"
 
     var obj = document.createElement('object')
     obj.id = 'pdfViewer'
@@ -443,11 +443,11 @@ const viewFazerAvaliacao = (id) => {
 
   if (iFazerAvaliacao.tag == 1) {
     iFazerAvaliacao.tag = 0
-    iFazerAvaliacao.src = "./assets/images/expandir.png"
+    iFazerAvaliacao.src = "./assets/images/Expandir.png"
     tFazerAvaliacao.innerHTML = null
   } else {
     iFazerAvaliacao.tag = 1
-    iFazerAvaliacao.src = "./assets/images/contrair.png"
+    iFazerAvaliacao.src = "./assets/images/Contrair.png"
 
     fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -472,12 +472,12 @@ const viewAvaliacao = (id, atualizar) => {
 
   if (iAvaliacao.tag == 1 && !atualizar) {
     iAvaliacao.tag = 0
-    iAvaliacao.src = "./assets/images/expandir.png"
+    iAvaliacao.src = "./assets/images/Expandir.png"
     tAvaliacao.innerHTML = null
     aAvaliacao.style.display = "none"
   } else {
     iAvaliacao.tag = 1
-    iAvaliacao.src = "./assets/images/contrair.png"
+    iAvaliacao.src = "./assets/images/Contrair.png"
     aAvaliacao.style.display = null
     fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -504,12 +504,12 @@ const viewAtendimento = (id, atualizar) => {
 
   if (iAtendimento.tag == 1 && !atualizar) {
     iAtendimento.tag = 0
-    iAtendimento.src = "./assets/images/expandir.png"
+    iAtendimento.src = "./assets/images/Expandir.png"
     tAtendimento.innerHTML = null
     aAtendimento.style.display = "none"
   } else {
     iAtendimento.tag = 1
-    iAtendimento.src = "./assets/images/contrair.png"
+    iAtendimento.src = "./assets/images/Contrair.png"
     aAtendimento.style.display = null
     fetch(`${_address}avaliacao/disciplina/${id}?codigo_aluno=${_userId}`,
       { headers: { "Authorization": "Bearer " + _token } }
@@ -537,7 +537,7 @@ const optionSubject = async (id) => {
         </div>
         <div class="headerGrid">
           <div id="loaderPDF"></div>
-          <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de estudo">
+          <img id="iconMaterial" onclick="viewPDF('${id}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair área de estudo">
         </div>
       </div>
       <li><div id="pdfDiv"></div></li>
@@ -546,7 +546,7 @@ const optionSubject = async (id) => {
       <div class="headerGrid">
         <h2>Fazer avaliações</h2>
         <div class="headerGrid">
-          <img id="iconFazerAvaliacao" onclick="viewFazerAvaliacao('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair área de avaliação">
+          <img id="iconFazerAvaliacao" onclick="viewFazerAvaliacao('${id}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair área de avaliação">
         </div>
       </div>
       <li>
@@ -562,7 +562,7 @@ const optionSubject = async (id) => {
         <h2>Acompanhar avaliações</h2>
         <div class="headerGrid">
           <img id="atualizaAvaliacao" onclick="viewAvaliacao('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar notas das avaliações">
-          <img id="iconAvaliacao" onclick="viewAvaliacao('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair notas das avaliações">
+          <img id="iconAvaliacao" onclick="viewAvaliacao('${id}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair notas das avaliações">
         </div>
       </div>
       <li>
@@ -578,7 +578,7 @@ const optionSubject = async (id) => {
         <h2>Solicitar atendimento</h2>
         <div class="headerGrid">
           <img id="atualizaAtendimento" onclick="viewAtendimento('${id}', true)" width=25px height=25px src="./assets/images/refresh.png" alt="Atualizar solicitação de atendimento">
-          <img id="iconAtendimento" onclick="viewAtendimento('${id}')" width=25px height=25px src="./assets/images/expandir.png" alt="Expandir ou contrair solicitação de atendimento">
+          <img id="iconAtendimento" onclick="viewAtendimento('${id}')" width=25px height=25px src="./assets/images/Expandir.png" alt="Expandir ou Contrair solicitação de atendimento">
         </div>
       </div>
       <li>
