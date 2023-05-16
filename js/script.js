@@ -1,4 +1,4 @@
-const _address = 'https://senacserverpi.herokuapp.com/api/'
+const _address = 'https://senacserverpi.vercel.app/api/'
 //const _address = 'http://127.0.0.1:3333/api/'
 var _token = null
 var _userName = null
@@ -12,7 +12,7 @@ const _mfApresentacao = 'Apresentação'
 const _mfRematriculaHistorico = 'Rematrícula/Histórico'
 
 const getImageRoute = async (element, route) => {
-  const response = await fetch(_address + route, { headers: { "Authorization": "Bearer " + _token } })
+  const response = await fetch(_address + route, { mode: "cors", headers: { "Authorization": "Bearer " + _token } })
   const data = await response.json()
   if (data && data.imagem)
     element.src = data.imagem
@@ -394,7 +394,7 @@ const viewCursoHistorico = (id, semestre) => {
               }
               grid += `<tr> 
                          <td class="columnDescription">${e.descricao}</td>
-                         <td class="columnValue">${e.nota ? e.nota.toFixed(2) : '0.00'}</td>
+                         <td class="columnValue">${e.nota ? e.nota : '0.00'}</td>
                        </tr>`
             }
             tAnteriorSemestre.innerHTML = grid
@@ -488,7 +488,7 @@ const viewAvaliacao = (id, atualizar) => {
           var media = 0
           for (e of json) {
             media += (e.nota * e.peso)
-            grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota.toFixed(2)}</td> </tr>`
+            grid += `<tr> <td class="columnDescription">${e.descricao}</td> <td class="columnValue">${e.nota}</td> </tr>`
           }
           grid += `<tr> <th class="columnDescription">Média</th> <th class="columnValue">${media.toFixed(2)}</th> </tr>`
           tAvaliacao.innerHTML = grid
